@@ -3,7 +3,7 @@
 package com.rails.api.services
 
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
-import com.github.tomakehurst.wiremock.client.WireMock.put
+import com.github.tomakehurst.wiremock.client.WireMock.post
 import com.github.tomakehurst.wiremock.client.WireMock.status
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
@@ -22,7 +22,7 @@ import com.rails.api.errors.RateLimitException
 import com.rails.api.errors.UnauthorizedException
 import com.rails.api.errors.UnexpectedStatusCodeException
 import com.rails.api.errors.UnprocessableEntityException
-import com.rails.api.models.pet.Pet
+import com.rails.api.models.users.UserCreateParams
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach
@@ -59,10 +59,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate400() {
-        val petService = client.pet()
+    fun usersCreate400() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -70,14 +70,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -88,10 +87,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate400WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate400WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(400).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -99,14 +98,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -117,10 +115,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate401() {
-        val petService = client.pet()
+    fun usersCreate401() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -128,14 +126,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -146,10 +143,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate401WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate401WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(401).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -157,14 +154,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -175,10 +171,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate403() {
-        val petService = client.pet()
+    fun usersCreate403() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -186,14 +182,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -204,10 +199,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate403WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate403WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(403).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -215,14 +210,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -233,10 +227,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate404() {
-        val petService = client.pet()
+    fun usersCreate404() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -244,14 +238,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -262,10 +255,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate404WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate404WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(404).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -273,14 +266,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -291,10 +283,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate422() {
-        val petService = client.pet()
+    fun usersCreate422() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -302,14 +294,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -320,10 +311,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate422WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate422WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(422).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -331,14 +322,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -349,10 +339,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate429() {
-        val petService = client.pet()
+    fun usersCreate429() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -360,14 +350,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -378,10 +367,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate429WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate429WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(429).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -389,14 +378,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -407,10 +395,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate500() {
-        val petService = client.pet()
+    fun usersCreate500() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -418,14 +406,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -436,10 +423,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate500WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate500WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(500).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -447,14 +434,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -465,10 +451,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate999() {
-        val petService = client.pet()
+    fun usersCreate999() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -476,14 +462,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -494,10 +479,10 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdate999WithRawResponse() {
-        val petService = client.pet().withRawResponse()
+    fun usersCreate999WithRawResponse() {
+        val userService = client.users().withRawResponse()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(
                     status(999).withHeader(HEADER_NAME, HEADER_VALUE).withBody(ERROR_JSON_BYTES)
                 )
@@ -505,14 +490,13 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }
@@ -523,23 +507,22 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun petUpdateInvalidJsonBody() {
-        val petService = client.pet()
+    fun usersCreateInvalidJsonBody() {
+        val userService = client.users()
         stubFor(
-            put(anyUrl())
+            post(anyUrl())
                 .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
         )
 
         val e =
             assertThrows<RailsException> {
-                petService.update(
-                    Pet.builder()
-                        .name("doggie")
-                        .addPhotoUrl("string")
-                        .id(10L)
-                        .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                        .status(Pet.Status.AVAILABLE)
-                        .addTag(Pet.Tag.builder().id(0L).name("name").build())
+                userService.create(
+                    UserCreateParams.builder()
+                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                        .email("dev@stainless.com")
+                        .firstName("first_name")
+                        .lastName("last_name")
+                        .password("password")
                         .build()
                 )
             }

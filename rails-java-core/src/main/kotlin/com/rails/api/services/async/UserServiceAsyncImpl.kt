@@ -4,12 +4,9 @@ package com.rails.api.services.async
 
 import com.rails.api.core.ClientOptions
 import com.rails.api.core.RequestOptions
-import com.rails.api.core.checkRequired
-import com.rails.api.core.handlers.emptyHandler
 import com.rails.api.core.handlers.errorBodyHandler
 import com.rails.api.core.handlers.errorHandler
 import com.rails.api.core.handlers.jsonHandler
-import com.rails.api.core.handlers.stringHandler
 import com.rails.api.core.http.HttpMethod
 import com.rails.api.core.http.HttpRequest
 import com.rails.api.core.http.HttpResponse
@@ -18,17 +15,10 @@ import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.core.http.json
 import com.rails.api.core.http.parseable
 import com.rails.api.core.prepareAsync
-import com.rails.api.models.user.User
-import com.rails.api.models.user.UserCreateParams
-import com.rails.api.models.user.UserCreateWithListParams
-import com.rails.api.models.user.UserDeleteParams
-import com.rails.api.models.user.UserLoginParams
-import com.rails.api.models.user.UserLogoutParams
-import com.rails.api.models.user.UserRetrieveParams
-import com.rails.api.models.user.UserUpdateParams
+import com.rails.api.models.users.UserCreateParams
+import com.rails.api.models.users.UserCreateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
-import kotlin.jvm.optionals.getOrNull
 
 class UserServiceAsyncImpl internal constructor(private val clientOptions: ClientOptions) :
     UserServiceAsync {
@@ -45,51 +35,9 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
     override fun create(
         params: UserCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<User> =
-        // post /user
+    ): CompletableFuture<UserCreateResponse> =
+        // post /api/v1/users
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
-
-    override fun retrieve(
-        params: UserRetrieveParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<User> =
-        // get /user/{username}
-        withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
-
-    override fun update(
-        params: UserUpdateParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
-        // put /user/{username}
-        withRawResponse().update(params, requestOptions).thenAccept {}
-
-    override fun delete(
-        params: UserDeleteParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
-        // delete /user/{username}
-        withRawResponse().delete(params, requestOptions).thenAccept {}
-
-    override fun createWithList(
-        params: UserCreateWithListParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<User> =
-        // post /user/createWithList
-        withRawResponse().createWithList(params, requestOptions).thenApply { it.parse() }
-
-    override fun login(
-        params: UserLoginParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<String> =
-        // get /user/login
-        withRawResponse().login(params, requestOptions).thenApply { it.parse() }
-
-    override fun logout(
-        params: UserLogoutParams,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<Void?> =
-        // get /user/logout
-        withRawResponse().logout(params, requestOptions).thenAccept {}
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         UserServiceAsync.WithRawResponse {
@@ -104,18 +52,19 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<User> = jsonHandler<User>(clientOptions.jsonMapper)
+        private val createHandler: Handler<UserCreateResponse> =
+            jsonHandler<UserCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: UserCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<User>> {
+        ): CompletableFuture<HttpResponseFor<UserCreateResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
                     .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
+                    .addPathSegments("api", "v1", "users")
+                    .body(json(clientOptions.jsonMapper, params._body()))
                     .build()
                     .prepareAsync(clientOptions, params)
             val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
@@ -130,169 +79,6 @@ class UserServiceAsyncImpl internal constructor(private val clientOptions: Clien
                                     it.validate()
                                 }
                             }
-                    }
-                }
-        }
-
-        private val retrieveHandler: Handler<User> = jsonHandler<User>(clientOptions.jsonMapper)
-
-        override fun retrieve(
-            params: UserRetrieveParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<User>> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("username", params.username().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", params._pathParam(0))
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { retrieveHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
-        private val updateHandler: Handler<Void?> = emptyHandler()
-
-        override fun update(
-            params: UserUpdateParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("existingUsername", params.existingUsername().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.PUT)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", params._pathParam(0))
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response.use { updateHandler.handle(it) }
-                    }
-                }
-        }
-
-        private val deleteHandler: Handler<Void?> = emptyHandler()
-
-        override fun delete(
-            params: UserDeleteParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
-            // We check here instead of in the params builder because this can be specified
-            // positionally or in the params class.
-            checkRequired("username", params.username().getOrNull())
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.DELETE)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", params._pathParam(0))
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response.use { deleteHandler.handle(it) }
-                    }
-                }
-        }
-
-        private val createWithListHandler: Handler<User> =
-            jsonHandler<User>(clientOptions.jsonMapper)
-
-        override fun createWithList(
-            params: UserCreateWithListParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<User>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.POST)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", "createWithList")
-                    .apply { params._body().ifPresent { body(json(clientOptions.jsonMapper, it)) } }
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response
-                            .use { createWithListHandler.handle(it) }
-                            .also {
-                                if (requestOptions.responseValidation!!) {
-                                    it.validate()
-                                }
-                            }
-                    }
-                }
-        }
-
-        private val loginHandler: Handler<String> = stringHandler()
-
-        override fun login(
-            params: UserLoginParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<String>> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", "login")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response.use { loginHandler.handle(it) }
-                    }
-                }
-        }
-
-        private val logoutHandler: Handler<Void?> = emptyHandler()
-
-        override fun logout(
-            params: UserLogoutParams,
-            requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponse> {
-            val request =
-                HttpRequest.builder()
-                    .method(HttpMethod.GET)
-                    .baseUrl(clientOptions.baseUrl())
-                    .addPathSegments("user", "logout")
-                    .build()
-                    .prepareAsync(clientOptions, params)
-            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
-            return request
-                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
-                .thenApply { response ->
-                    errorHandler.handle(response).parseable {
-                        response.use { logoutHandler.handle(it) }
                     }
                 }
         }

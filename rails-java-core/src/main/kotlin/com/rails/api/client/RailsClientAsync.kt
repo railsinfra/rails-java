@@ -3,8 +3,8 @@
 package com.rails.api.client
 
 import com.rails.api.core.ClientOptions
-import com.rails.api.services.async.PetServiceAsync
-import com.rails.api.services.async.StoreServiceAsync
+import com.rails.api.services.async.AccountServiceAsync
+import com.rails.api.services.async.TransactionServiceAsync
 import com.rails.api.services.async.UserServiceAsync
 import java.util.function.Consumer
 
@@ -44,11 +44,11 @@ interface RailsClientAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync
 
-    fun pet(): PetServiceAsync
+    fun users(): UserServiceAsync
 
-    fun store(): StoreServiceAsync
+    fun accounts(): AccountServiceAsync
 
-    fun user(): UserServiceAsync
+    fun transactions(): TransactionServiceAsync
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -73,10 +73,10 @@ interface RailsClientAsync {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync.WithRawResponse
 
-        fun pet(): PetServiceAsync.WithRawResponse
+        fun users(): UserServiceAsync.WithRawResponse
 
-        fun store(): StoreServiceAsync.WithRawResponse
+        fun accounts(): AccountServiceAsync.WithRawResponse
 
-        fun user(): UserServiceAsync.WithRawResponse
+        fun transactions(): TransactionServiceAsync.WithRawResponse
     }
 }

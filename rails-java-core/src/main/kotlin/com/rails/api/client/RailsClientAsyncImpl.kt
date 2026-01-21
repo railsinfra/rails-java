@@ -4,10 +4,10 @@ package com.rails.api.client
 
 import com.rails.api.core.ClientOptions
 import com.rails.api.core.getPackageVersion
-import com.rails.api.services.async.PetServiceAsync
-import com.rails.api.services.async.PetServiceAsyncImpl
-import com.rails.api.services.async.StoreServiceAsync
-import com.rails.api.services.async.StoreServiceAsyncImpl
+import com.rails.api.services.async.AccountServiceAsync
+import com.rails.api.services.async.AccountServiceAsyncImpl
+import com.rails.api.services.async.TransactionServiceAsync
+import com.rails.api.services.async.TransactionServiceAsyncImpl
 import com.rails.api.services.async.UserServiceAsync
 import com.rails.api.services.async.UserServiceAsyncImpl
 import java.util.function.Consumer
@@ -29,13 +29,15 @@ class RailsClientAsyncImpl(private val clientOptions: ClientOptions) : RailsClie
         WithRawResponseImpl(clientOptions)
     }
 
-    private val pet: PetServiceAsync by lazy { PetServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val users: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
 
-    private val store: StoreServiceAsync by lazy {
-        StoreServiceAsyncImpl(clientOptionsWithUserAgent)
+    private val accounts: AccountServiceAsync by lazy {
+        AccountServiceAsyncImpl(clientOptionsWithUserAgent)
     }
 
-    private val user: UserServiceAsync by lazy { UserServiceAsyncImpl(clientOptionsWithUserAgent) }
+    private val transactions: TransactionServiceAsync by lazy {
+        TransactionServiceAsyncImpl(clientOptionsWithUserAgent)
+    }
 
     override fun sync(): RailsClient = sync
 
@@ -44,27 +46,27 @@ class RailsClientAsyncImpl(private val clientOptions: ClientOptions) : RailsClie
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync =
         RailsClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun pet(): PetServiceAsync = pet
+    override fun users(): UserServiceAsync = users
 
-    override fun store(): StoreServiceAsync = store
+    override fun accounts(): AccountServiceAsync = accounts
 
-    override fun user(): UserServiceAsync = user
+    override fun transactions(): TransactionServiceAsync = transactions
 
     override fun close() = clientOptions.close()
 
     class WithRawResponseImpl internal constructor(private val clientOptions: ClientOptions) :
         RailsClientAsync.WithRawResponse {
 
-        private val pet: PetServiceAsync.WithRawResponse by lazy {
-            PetServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val store: StoreServiceAsync.WithRawResponse by lazy {
-            StoreServiceAsyncImpl.WithRawResponseImpl(clientOptions)
-        }
-
-        private val user: UserServiceAsync.WithRawResponse by lazy {
+        private val users: UserServiceAsync.WithRawResponse by lazy {
             UserServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val accounts: AccountServiceAsync.WithRawResponse by lazy {
+            AccountServiceAsyncImpl.WithRawResponseImpl(clientOptions)
+        }
+
+        private val transactions: TransactionServiceAsync.WithRawResponse by lazy {
+            TransactionServiceAsyncImpl.WithRawResponseImpl(clientOptions)
         }
 
         override fun withOptions(
@@ -74,10 +76,10 @@ class RailsClientAsyncImpl(private val clientOptions: ClientOptions) : RailsClie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        override fun pet(): PetServiceAsync.WithRawResponse = pet
+        override fun users(): UserServiceAsync.WithRawResponse = users
 
-        override fun store(): StoreServiceAsync.WithRawResponse = store
+        override fun accounts(): AccountServiceAsync.WithRawResponse = accounts
 
-        override fun user(): UserServiceAsync.WithRawResponse = user
+        override fun transactions(): TransactionServiceAsync.WithRawResponse = transactions
     }
 }
