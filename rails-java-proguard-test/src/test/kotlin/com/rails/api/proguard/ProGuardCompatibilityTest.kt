@@ -5,7 +5,7 @@ package com.rails.api.proguard
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.rails.api.client.okhttp.RailsOkHttpClient
 import com.rails.api.core.jsonMapper
-import com.rails.api.models.pet.Pet
+import com.rails.api.models.users.UserCreateResponse
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
 import org.assertj.core.api.Assertions.assertThat
@@ -47,27 +47,26 @@ internal class ProGuardCompatibilityTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
 
         assertThat(client).isNotNull()
-        assertThat(client.pet()).isNotNull()
-        assertThat(client.store()).isNotNull()
-        assertThat(client.user()).isNotNull()
+        assertThat(client.users()).isNotNull()
+        assertThat(client.accounts()).isNotNull()
+        assertThat(client.transactions()).isNotNull()
     }
 
     @Test
-    fun petRoundtrip() {
+    fun userCreateResponseRoundtrip() {
         val jsonMapper = jsonMapper()
-        val pet =
-            Pet.builder()
-                .name("doggie")
-                .addPhotoUrl("string")
-                .id(10L)
-                .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                .status(Pet.Status.AVAILABLE)
-                .addTag(Pet.Tag.builder().id(0L).name("name").build())
+        val userCreateResponse =
+            UserCreateResponse.builder()
+                .status("status")
+                .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .build()
 
-        val roundtrippedPet =
-            jsonMapper.readValue(jsonMapper.writeValueAsString(pet), jacksonTypeRef<Pet>())
+        val roundtrippedUserCreateResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(userCreateResponse),
+                jacksonTypeRef<UserCreateResponse>(),
+            )
 
-        assertThat(roundtrippedPet).isEqualTo(pet)
+        assertThat(roundtrippedUserCreateResponse).isEqualTo(userCreateResponse)
     }
 }
