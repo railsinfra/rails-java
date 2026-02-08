@@ -15,7 +15,7 @@ import com.rails.api.core.http.HttpResponse.Handler
 import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.core.http.parseable
 import com.rails.api.core.prepareAsync
-import com.rails.api.models.accounts.Transaction
+import com.rails.api.models.Transaction
 import com.rails.api.models.transactions.TransactionListByAccountParams
 import com.rails.api.models.transactions.TransactionListParams
 import com.rails.api.models.transactions.TransactionListResponse

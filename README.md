@@ -45,10 +45,10 @@ RailsClient client = RailsOkHttpClient.fromEnv();
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("dev@stainless.com")
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 UserCreateResponse user = client.users().create(params);
 ```
@@ -150,10 +150,10 @@ RailsClient client = RailsOkHttpClient.fromEnv();
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("dev@stainless.com")
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 CompletableFuture<UserCreateResponse> user = client.async().users().create(params);
 ```
@@ -173,10 +173,10 @@ RailsClientAsync client = RailsOkHttpClientAsync.fromEnv();
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("dev@stainless.com")
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 CompletableFuture<UserCreateResponse> user = client.users().create(params);
 ```
@@ -197,10 +197,10 @@ import com.rails.api.models.users.UserCreateResponse;
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("dev@stainless.com")
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 HttpResponseFor<UserCreateResponse> user = client.users().withRawResponse().create(params);
 
@@ -452,9 +452,9 @@ import com.rails.api.models.users.UserCreateParams;
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
     .email(JsonValue.from(42))
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 ```
 

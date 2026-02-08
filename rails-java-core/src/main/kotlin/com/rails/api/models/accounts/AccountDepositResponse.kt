@@ -12,6 +12,7 @@ import com.rails.api.core.JsonMissing
 import com.rails.api.core.JsonValue
 import com.rails.api.core.checkRequired
 import com.rails.api.errors.RailsInvalidDataException
+import com.rails.api.models.Transaction
 import java.util.Collections
 import java.util.Objects
 import kotlin.jvm.optionals.getOrNull

@@ -4,6 +4,7 @@ package com.rails.api.models.accounts
 
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.rails.api.core.jsonMapper
+import com.rails.api.models.Transaction
 import java.time.OffsetDateTime
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
