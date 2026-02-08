@@ -10,8 +10,8 @@ configure<PublishingExtension> {
 
             pom {
                 name.set("Rails API")
-                description.set("Rails public API for founders")
-                url.set("https://www.github.com/sibabale/rails-java")
+                description.set("Rails public API. All endpoints require API key (X-API-Key). Environment must be\nexplicit: use sandbox or production base URL; there is no default to production.\nUnauthenticated access is not supported.")
+                url.set("https://www.github.com/stainless-sdks/rails-java")
 
                 licenses {
                     license {
@@ -26,9 +26,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/sibabale/rails-java.git")
-                    developerConnection.set("scm:git:git://github.com/sibabale/rails-java.git")
-                    url.set("https://github.com/sibabale/rails-java")
+                    connection.set("scm:git:git://github.com/stainless-sdks/rails-java.git")
+                    developerConnection.set("scm:git:git://github.com/stainless-sdks/rails-java.git")
+                    url.set("https://github.com/stainless-sdks/rails-java")
                 }
 
                 versionMapping {

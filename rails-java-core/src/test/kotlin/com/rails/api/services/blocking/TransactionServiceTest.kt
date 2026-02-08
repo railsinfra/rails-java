@@ -5,6 +5,7 @@ package com.rails.api.services.blocking
 import com.rails.api.TestServerExtension
 import com.rails.api.client.okhttp.RailsOkHttpClient
 import com.rails.api.models.transactions.TransactionListByAccountParams
+import com.rails.api.models.transactions.TransactionListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.extension.ExtendWith
@@ -25,6 +26,28 @@ internal class TransactionServiceTest {
         val transaction = transactionService.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
         transaction.validate()
+    }
+
+    @Disabled("Prism tests are disabled")
+    @Test
+    fun list() {
+        val client =
+            RailsOkHttpClient.builder()
+                .baseUrl(TestServerExtension.BASE_URL)
+                .apiKey("My API Key")
+                .build()
+        val transactionService = client.transactions()
+
+        val transactions =
+            transactionService.list(
+                TransactionListParams.builder()
+                    .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .page(1L)
+                    .perPage(1L)
+                    .build()
+            )
+
+        transactions.validate()
     }
 
     @Disabled("Prism tests are disabled")

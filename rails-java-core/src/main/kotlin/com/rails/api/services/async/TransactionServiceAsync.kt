@@ -7,6 +7,8 @@ import com.rails.api.core.RequestOptions
 import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.models.transactions.TransactionListByAccountParams
 import com.rails.api.models.transactions.TransactionListByAccountResponse
+import com.rails.api.models.transactions.TransactionListParams
+import com.rails.api.models.transactions.TransactionListResponse
 import com.rails.api.models.transactions.TransactionRetrieveParams
 import com.rails.api.models.transactions.TransactionRetrieveResponse
 import java.util.concurrent.CompletableFuture
@@ -61,6 +63,16 @@ interface TransactionServiceAsync {
         requestOptions: RequestOptions,
     ): CompletableFuture<TransactionRetrieveResponse> =
         retrieve(id, TransactionRetrieveParams.none(), requestOptions)
+
+    /** List transactions by organization */
+    fun list(params: TransactionListParams): CompletableFuture<TransactionListResponse> =
+        list(params, RequestOptions.none())
+
+    /** @see list */
+    fun list(
+        params: TransactionListParams,
+        requestOptions: RequestOptions = RequestOptions.none(),
+    ): CompletableFuture<TransactionListResponse>
 
     /** List account transactions */
     fun listByAccount(
@@ -157,6 +169,21 @@ interface TransactionServiceAsync {
             requestOptions: RequestOptions,
         ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
             retrieve(id, TransactionRetrieveParams.none(), requestOptions)
+
+        /**
+         * Returns a raw HTTP response for `get /api/v1/transactions`, but is otherwise the same as
+         * [TransactionServiceAsync.list].
+         */
+        fun list(
+            params: TransactionListParams
+        ): CompletableFuture<HttpResponseFor<TransactionListResponse>> =
+            list(params, RequestOptions.none())
+
+        /** @see list */
+        fun list(
+            params: TransactionListParams,
+            requestOptions: RequestOptions = RequestOptions.none(),
+        ): CompletableFuture<HttpResponseFor<TransactionListResponse>>
 
         /**
          * Returns a raw HTTP response for `get /api/v1/accounts/{account_id}/transactions`, but is

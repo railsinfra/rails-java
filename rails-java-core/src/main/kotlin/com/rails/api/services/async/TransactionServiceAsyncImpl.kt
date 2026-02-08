@@ -17,6 +17,8 @@ import com.rails.api.core.http.parseable
 import com.rails.api.core.prepareAsync
 import com.rails.api.models.transactions.TransactionListByAccountParams
 import com.rails.api.models.transactions.TransactionListByAccountResponse
+import com.rails.api.models.transactions.TransactionListParams
+import com.rails.api.models.transactions.TransactionListResponse
 import com.rails.api.models.transactions.TransactionRetrieveParams
 import com.rails.api.models.transactions.TransactionRetrieveResponse
 import java.util.concurrent.CompletableFuture
@@ -41,6 +43,13 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
     ): CompletableFuture<TransactionRetrieveResponse> =
         // get /api/v1/transactions/{id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
+
+    override fun list(
+        params: TransactionListParams,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<TransactionListResponse> =
+        // get /api/v1/transactions
+        withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     override fun listByAccount(
         params: TransactionListByAccountParams,
@@ -86,6 +95,36 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
                     errorHandler.handle(response).parseable {
                         response
                             .use { retrieveHandler.handle(it) }
+                            .also {
+                                if (requestOptions.responseValidation!!) {
+                                    it.validate()
+                                }
+                            }
+                    }
+                }
+        }
+
+        private val listHandler: Handler<TransactionListResponse> =
+            jsonHandler<TransactionListResponse>(clientOptions.jsonMapper)
+
+        override fun list(
+            params: TransactionListParams,
+            requestOptions: RequestOptions,
+        ): CompletableFuture<HttpResponseFor<TransactionListResponse>> {
+            val request =
+                HttpRequest.builder()
+                    .method(HttpMethod.GET)
+                    .baseUrl(clientOptions.baseUrl())
+                    .addPathSegments("api", "v1", "transactions")
+                    .build()
+                    .prepareAsync(clientOptions, params)
+            val requestOptions = requestOptions.applyDefaults(RequestOptions.from(clientOptions))
+            return request
+                .thenComposeAsync { clientOptions.httpClient.executeAsync(it, requestOptions) }
+                .thenApply { response ->
+                    errorHandler.handle(response).parseable {
+                        response
+                            .use { listHandler.handle(it) }
                             .also {
                                 if (requestOptions.responseValidation!!) {
                                     it.validate()

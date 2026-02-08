@@ -105,15 +105,20 @@ private constructor(
     /**
      * The base URL to use for every request.
      *
-     * Defaults to the production environment: `https://api.rails.com`.
+     * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+     *
+     * The following other environments, with dedicated builder methods, are available:
+     * - production: `https://accounts-service-production.up.railway.app`
      */
-    fun baseUrl(): String = baseUrl ?: PRODUCTION_URL
+    fun baseUrl(): String = baseUrl ?: STAGING_URL
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        const val PRODUCTION_URL = "https://api.rails.com"
+        const val STAGING_URL = "https://accounts-service-staging.up.railway.app"
+
+        const val PRODUCTION_URL = "https://accounts-service-production.up.railway.app"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
@@ -219,12 +224,18 @@ private constructor(
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the production environment: `https://api.rails.com`.
+         * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+         *
+         * The following other environments, with dedicated builder methods, are available:
+         * - production: `https://accounts-service-production.up.railway.app`
          */
         fun baseUrl(baseUrl: String?) = apply { this.baseUrl = baseUrl }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
+
+        /** Sets [baseUrl] to `https://accounts-service-production.up.railway.app`. */
+        fun production() = baseUrl(PRODUCTION_URL)
 
         /**
          * Whether to call `validate` on every response before returning it.
@@ -359,10 +370,10 @@ private constructor(
          *
          * See this table for the available options:
          *
-         * | Setter    | System property | Environment variable | Required | Default value             |
-         * |-----------|-----------------|----------------------|----------|---------------------------|
-         * | `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                         |
-         * | `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://api.rails.com"` |
+         * |Setter   |System property|Environment variable|Required|Default value                                      |
+         * |---------|---------------|--------------------|--------|---------------------------------------------------|
+         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                  |
+         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://accounts-service-staging.up.railway.app"`|
          *
          * System properties take precedence over environment variables.
          */
