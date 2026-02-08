@@ -165,7 +165,7 @@ class RailsOkHttpClientAsync private constructor() {
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the production environment: `https://api.rails.com`.
+         * Defaults to the production environment: `https://api.railsinfra.com`.
          */
         fun baseUrl(baseUrl: String?) = apply { clientOptions.baseUrl(baseUrl) }
 

@@ -96,7 +96,7 @@ See this table for the available options:
 | Setter    | System property | Environment variable | Required | Default value             |
 | --------- | --------------- | -------------------- | -------- | ------------------------- |
 | `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                         |
-| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://api.rails.com"` |
+| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://api.railsinfra.com"` |
 
 System properties take precedence over environment variables.
 
