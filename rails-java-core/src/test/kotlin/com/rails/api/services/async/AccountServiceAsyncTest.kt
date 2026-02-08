@@ -87,10 +87,10 @@ internal class AccountServiceAsyncTest {
                 .build()
         val accountServiceAsync = client.accounts()
 
-        val responseFuture = accountServiceAsync.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val accountFuture = accountServiceAsync.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
-        val response = responseFuture.get()
-        response.validate()
+        val account = accountFuture.get()
+        account.validate()
     }
 
     @Disabled("Prism tests are disabled")
@@ -150,7 +150,7 @@ internal class AccountServiceAsyncTest {
                 .build()
         val accountServiceAsync = client.accounts()
 
-        val responseFuture =
+        val accountFuture =
             accountServiceAsync.updateStatus(
                 AccountUpdateStatusParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -158,8 +158,8 @@ internal class AccountServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.validate()
+        val account = accountFuture.get()
+        account.validate()
     }
 
     @Disabled("Prism tests are disabled")

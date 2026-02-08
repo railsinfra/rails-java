@@ -5,12 +5,11 @@ package com.rails.api.services.async
 import com.rails.api.core.ClientOptions
 import com.rails.api.core.RequestOptions
 import com.rails.api.core.http.HttpResponseFor
+import com.rails.api.models.accounts.Transaction
 import com.rails.api.models.transactions.TransactionListByAccountParams
-import com.rails.api.models.transactions.TransactionListByAccountResponse
 import com.rails.api.models.transactions.TransactionListParams
 import com.rails.api.models.transactions.TransactionListResponse
 import com.rails.api.models.transactions.TransactionRetrieveParams
-import com.rails.api.models.transactions.TransactionRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
@@ -29,7 +28,7 @@ interface TransactionServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): TransactionServiceAsync
 
     /** Retrieve transaction */
-    fun retrieve(id: String): CompletableFuture<TransactionRetrieveResponse> =
+    fun retrieve(id: String): CompletableFuture<Transaction> =
         retrieve(id, TransactionRetrieveParams.none())
 
     /** @see retrieve */
@@ -37,31 +36,26 @@ interface TransactionServiceAsync {
         id: String,
         params: TransactionRetrieveParams = TransactionRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TransactionRetrieveResponse> =
-        retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): CompletableFuture<Transaction> = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         id: String,
         params: TransactionRetrieveParams = TransactionRetrieveParams.none(),
-    ): CompletableFuture<TransactionRetrieveResponse> = retrieve(id, params, RequestOptions.none())
+    ): CompletableFuture<Transaction> = retrieve(id, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: TransactionRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<TransactionRetrieveResponse>
+    ): CompletableFuture<Transaction>
 
     /** @see retrieve */
-    fun retrieve(
-        params: TransactionRetrieveParams
-    ): CompletableFuture<TransactionRetrieveResponse> = retrieve(params, RequestOptions.none())
+    fun retrieve(params: TransactionRetrieveParams): CompletableFuture<Transaction> =
+        retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(
-        id: String,
-        requestOptions: RequestOptions,
-    ): CompletableFuture<TransactionRetrieveResponse> =
+    fun retrieve(id: String, requestOptions: RequestOptions): CompletableFuture<Transaction> =
         retrieve(id, TransactionRetrieveParams.none(), requestOptions)
 
     /** List transactions by organization */
@@ -75,9 +69,7 @@ interface TransactionServiceAsync {
     ): CompletableFuture<TransactionListResponse>
 
     /** List account transactions */
-    fun listByAccount(
-        accountId: String
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
+    fun listByAccount(accountId: String): CompletableFuture<List<Transaction>> =
         listByAccount(accountId, TransactionListByAccountParams.none())
 
     /** @see listByAccount */
@@ -85,33 +77,32 @@ interface TransactionServiceAsync {
         accountId: String,
         params: TransactionListByAccountParams = TransactionListByAccountParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
+    ): CompletableFuture<List<Transaction>> =
         listByAccount(params.toBuilder().accountId(accountId).build(), requestOptions)
 
     /** @see listByAccount */
     fun listByAccount(
         accountId: String,
         params: TransactionListByAccountParams = TransactionListByAccountParams.none(),
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
+    ): CompletableFuture<List<Transaction>> =
         listByAccount(accountId, params, RequestOptions.none())
 
     /** @see listByAccount */
     fun listByAccount(
         params: TransactionListByAccountParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<TransactionListByAccountResponse>>
+    ): CompletableFuture<List<Transaction>>
 
     /** @see listByAccount */
     fun listByAccount(
         params: TransactionListByAccountParams
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
-        listByAccount(params, RequestOptions.none())
+    ): CompletableFuture<List<Transaction>> = listByAccount(params, RequestOptions.none())
 
     /** @see listByAccount */
     fun listByAccount(
         accountId: String,
         requestOptions: RequestOptions,
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
+    ): CompletableFuture<List<Transaction>> =
         listByAccount(accountId, TransactionListByAccountParams.none(), requestOptions)
 
     /**
@@ -133,7 +124,7 @@ interface TransactionServiceAsync {
          * Returns a raw HTTP response for `get /api/v1/transactions/{id}`, but is otherwise the
          * same as [TransactionServiceAsync.retrieve].
          */
-        fun retrieve(id: String): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
+        fun retrieve(id: String): CompletableFuture<HttpResponseFor<Transaction>> =
             retrieve(id, TransactionRetrieveParams.none())
 
         /** @see retrieve */
@@ -141,33 +132,32 @@ interface TransactionServiceAsync {
             id: String,
             params: TransactionRetrieveParams = TransactionRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<Transaction>> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
         fun retrieve(
             id: String,
             params: TransactionRetrieveParams = TransactionRetrieveParams.none(),
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<Transaction>> =
             retrieve(id, params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             params: TransactionRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>>
+        ): CompletableFuture<HttpResponseFor<Transaction>>
 
         /** @see retrieve */
         fun retrieve(
             params: TransactionRetrieveParams
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
-            retrieve(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<Transaction>> = retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> =
+        ): CompletableFuture<HttpResponseFor<Transaction>> =
             retrieve(id, TransactionRetrieveParams.none(), requestOptions)
 
         /**
@@ -191,7 +181,7 @@ interface TransactionServiceAsync {
          */
         fun listByAccount(
             accountId: String
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> =
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> =
             listByAccount(accountId, TransactionListByAccountParams.none())
 
         /** @see listByAccount */
@@ -199,33 +189,33 @@ interface TransactionServiceAsync {
             accountId: String,
             params: TransactionListByAccountParams = TransactionListByAccountParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> =
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> =
             listByAccount(params.toBuilder().accountId(accountId).build(), requestOptions)
 
         /** @see listByAccount */
         fun listByAccount(
             accountId: String,
             params: TransactionListByAccountParams = TransactionListByAccountParams.none(),
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> =
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> =
             listByAccount(accountId, params, RequestOptions.none())
 
         /** @see listByAccount */
         fun listByAccount(
             params: TransactionListByAccountParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>>
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>>
 
         /** @see listByAccount */
         fun listByAccount(
             params: TransactionListByAccountParams
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> =
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> =
             listByAccount(params, RequestOptions.none())
 
         /** @see listByAccount */
         fun listByAccount(
             accountId: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> =
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> =
             listByAccount(accountId, TransactionListByAccountParams.none(), requestOptions)
     }
 }

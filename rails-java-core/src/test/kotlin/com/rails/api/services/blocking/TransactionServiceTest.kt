@@ -60,7 +60,7 @@ internal class TransactionServiceTest {
                 .build()
         val transactionService = client.transactions()
 
-        val response =
+        val transactions =
             transactionService.listByAccount(
                 TransactionListByAccountParams.builder()
                     .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -68,6 +68,6 @@ internal class TransactionServiceTest {
                     .build()
             )
 
-        response.forEach { it.validate() }
+        transactions.forEach { it.validate() }
     }
 }

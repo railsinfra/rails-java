@@ -16,20 +16,16 @@ import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.core.http.json
 import com.rails.api.core.http.parseable
 import com.rails.api.core.prepareAsync
+import com.rails.api.models.accounts.Account
 import com.rails.api.models.accounts.AccountCloseParams
-import com.rails.api.models.accounts.AccountCloseResponse
 import com.rails.api.models.accounts.AccountCreateParams
-import com.rails.api.models.accounts.AccountCreateResponse
 import com.rails.api.models.accounts.AccountDepositParams
 import com.rails.api.models.accounts.AccountDepositResponse
 import com.rails.api.models.accounts.AccountListParams
-import com.rails.api.models.accounts.AccountListResponse
 import com.rails.api.models.accounts.AccountRetrieveParams
-import com.rails.api.models.accounts.AccountRetrieveResponse
 import com.rails.api.models.accounts.AccountTransferParams
 import com.rails.api.models.accounts.AccountTransferResponse
 import com.rails.api.models.accounts.AccountUpdateStatusParams
-import com.rails.api.models.accounts.AccountUpdateStatusResponse
 import com.rails.api.models.accounts.AccountWithdrawParams
 import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.concurrent.CompletableFuture
@@ -51,28 +47,28 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun create(
         params: AccountCreateParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AccountCreateResponse> =
+    ): CompletableFuture<Account> =
         // post /api/v1/accounts
         withRawResponse().create(params, requestOptions).thenApply { it.parse() }
 
     override fun retrieve(
         params: AccountRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AccountRetrieveResponse> =
+    ): CompletableFuture<Account> =
         // get /api/v1/accounts/{id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
     override fun list(
         params: AccountListParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<List<AccountListResponse>> =
+    ): CompletableFuture<List<Account>> =
         // get /api/v1/accounts
         withRawResponse().list(params, requestOptions).thenApply { it.parse() }
 
     override fun close(
         params: AccountCloseParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AccountCloseResponse> =
+    ): CompletableFuture<Account> =
         // delete /api/v1/accounts/{id}
         withRawResponse().close(params, requestOptions).thenApply { it.parse() }
 
@@ -93,7 +89,7 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
     override fun updateStatus(
         params: AccountUpdateStatusParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<AccountUpdateStatusResponse> =
+    ): CompletableFuture<Account> =
         // patch /api/v1/accounts/{id}
         withRawResponse().updateStatus(params, requestOptions).thenApply { it.parse() }
 
@@ -117,13 +113,12 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<AccountCreateResponse> =
-            jsonHandler<AccountCreateResponse>(clientOptions.jsonMapper)
+        private val createHandler: Handler<Account> = jsonHandler<Account>(clientOptions.jsonMapper)
 
         override fun create(
             params: AccountCreateParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AccountCreateResponse>> {
+        ): CompletableFuture<HttpResponseFor<Account>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -148,13 +143,13 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val retrieveHandler: Handler<AccountRetrieveResponse> =
-            jsonHandler<AccountRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<Account> =
+            jsonHandler<Account>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: AccountRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> {
+        ): CompletableFuture<HttpResponseFor<Account>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -181,13 +176,13 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val listHandler: Handler<List<AccountListResponse>> =
-            jsonHandler<List<AccountListResponse>>(clientOptions.jsonMapper)
+        private val listHandler: Handler<List<Account>> =
+            jsonHandler<List<Account>>(clientOptions.jsonMapper)
 
         override fun list(
             params: AccountListParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List<AccountListResponse>>> {
+        ): CompletableFuture<HttpResponseFor<List<Account>>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -211,13 +206,12 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val closeHandler: Handler<AccountCloseResponse> =
-            jsonHandler<AccountCloseResponse>(clientOptions.jsonMapper)
+        private val closeHandler: Handler<Account> = jsonHandler<Account>(clientOptions.jsonMapper)
 
         override fun close(
             params: AccountCloseParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>> {
+        ): CompletableFuture<HttpResponseFor<Account>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -313,13 +307,13 @@ class AccountServiceAsyncImpl internal constructor(private val clientOptions: Cl
                 }
         }
 
-        private val updateStatusHandler: Handler<AccountUpdateStatusResponse> =
-            jsonHandler<AccountUpdateStatusResponse>(clientOptions.jsonMapper)
+        private val updateStatusHandler: Handler<Account> =
+            jsonHandler<Account>(clientOptions.jsonMapper)
 
         override fun updateStatus(
             params: AccountUpdateStatusParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> {
+        ): CompletableFuture<HttpResponseFor<Account>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

@@ -15,12 +15,11 @@ import com.rails.api.core.http.HttpResponse.Handler
 import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.core.http.parseable
 import com.rails.api.core.prepareAsync
+import com.rails.api.models.accounts.Transaction
 import com.rails.api.models.transactions.TransactionListByAccountParams
-import com.rails.api.models.transactions.TransactionListByAccountResponse
 import com.rails.api.models.transactions.TransactionListParams
 import com.rails.api.models.transactions.TransactionListResponse
 import com.rails.api.models.transactions.TransactionRetrieveParams
-import com.rails.api.models.transactions.TransactionRetrieveResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
@@ -40,7 +39,7 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
     override fun retrieve(
         params: TransactionRetrieveParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<TransactionRetrieveResponse> =
+    ): CompletableFuture<Transaction> =
         // get /api/v1/transactions/{id}
         withRawResponse().retrieve(params, requestOptions).thenApply { it.parse() }
 
@@ -54,7 +53,7 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
     override fun listByAccount(
         params: TransactionListByAccountParams,
         requestOptions: RequestOptions,
-    ): CompletableFuture<List<TransactionListByAccountResponse>> =
+    ): CompletableFuture<List<Transaction>> =
         // get /api/v1/accounts/{account_id}/transactions
         withRawResponse().listByAccount(params, requestOptions).thenApply { it.parse() }
 
@@ -71,13 +70,13 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val retrieveHandler: Handler<TransactionRetrieveResponse> =
-            jsonHandler<TransactionRetrieveResponse>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<Transaction> =
+            jsonHandler<Transaction>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: TransactionRetrieveParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<TransactionRetrieveResponse>> {
+        ): CompletableFuture<HttpResponseFor<Transaction>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -134,13 +133,13 @@ class TransactionServiceAsyncImpl internal constructor(private val clientOptions
                 }
         }
 
-        private val listByAccountHandler: Handler<List<TransactionListByAccountResponse>> =
-            jsonHandler<List<TransactionListByAccountResponse>>(clientOptions.jsonMapper)
+        private val listByAccountHandler: Handler<List<Transaction>> =
+            jsonHandler<List<Transaction>>(clientOptions.jsonMapper)
 
         override fun listByAccount(
             params: TransactionListByAccountParams,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<List<TransactionListByAccountResponse>>> {
+        ): CompletableFuture<HttpResponseFor<List<Transaction>>> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("accountId", params.accountId().getOrNull())

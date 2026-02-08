@@ -63,7 +63,7 @@ internal class TransactionServiceAsyncTest {
                 .build()
         val transactionServiceAsync = client.transactions()
 
-        val responseFuture =
+        val transactionsFuture =
             transactionServiceAsync.listByAccount(
                 TransactionListByAccountParams.builder()
                     .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -71,7 +71,7 @@ internal class TransactionServiceAsyncTest {
                     .build()
             )
 
-        val response = responseFuture.get()
-        response.forEach { it.validate() }
+        val transactions = transactionsFuture.get()
+        transactions.forEach { it.validate() }
     }
 }
