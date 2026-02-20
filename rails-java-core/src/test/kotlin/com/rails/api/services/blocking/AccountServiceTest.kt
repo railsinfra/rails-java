@@ -2,7 +2,6 @@
 
 package com.rails.api.services.blocking
 
-import com.rails.api.TestServerExtension
 import com.rails.api.client.okhttp.RailsOkHttpClient
 import com.rails.api.models.accounts.AccountCreateParams
 import com.rails.api.models.accounts.AccountDepositParams
@@ -12,19 +11,13 @@ import com.rails.api.models.accounts.AccountUpdateStatusParams
 import com.rails.api.models.accounts.AccountWithdrawParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class AccountServiceTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun create() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val account =
@@ -44,11 +37,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val account = accountService.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -59,11 +48,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val accounts =
@@ -77,11 +62,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun close() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val account = accountService.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -92,11 +73,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun deposit() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val response =
@@ -114,11 +91,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun transfer() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val response =
@@ -137,11 +110,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun updateStatus() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val account =
@@ -158,11 +127,7 @@ internal class AccountServiceTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun withdraw() {
-        val client =
-            RailsOkHttpClient.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
         val response =

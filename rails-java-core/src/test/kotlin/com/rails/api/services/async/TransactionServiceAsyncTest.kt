@@ -2,25 +2,18 @@
 
 package com.rails.api.services.async
 
-import com.rails.api.TestServerExtension
 import com.rails.api.client.okhttp.RailsOkHttpClientAsync
 import com.rails.api.models.transactions.TransactionListByAccountParams
 import com.rails.api.models.transactions.TransactionListParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
-import org.junit.jupiter.api.extension.ExtendWith
 
-@ExtendWith(TestServerExtension::class)
 internal class TransactionServiceAsyncTest {
 
     @Disabled("Prism tests are disabled")
     @Test
     fun retrieve() {
-        val client =
-            RailsOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val transactionServiceAsync = client.transactions()
 
         val transactionFuture =
@@ -33,11 +26,7 @@ internal class TransactionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun list() {
-        val client =
-            RailsOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val transactionServiceAsync = client.transactions()
 
         val transactionsFuture =
@@ -56,11 +45,7 @@ internal class TransactionServiceAsyncTest {
     @Disabled("Prism tests are disabled")
     @Test
     fun listByAccount() {
-        val client =
-            RailsOkHttpClientAsync.builder()
-                .baseUrl(TestServerExtension.BASE_URL)
-                .apiKey("My API Key")
-                .build()
+        val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val transactionServiceAsync = client.transactions()
 
         val transactionsFuture =
