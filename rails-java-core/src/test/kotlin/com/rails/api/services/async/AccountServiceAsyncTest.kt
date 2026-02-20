@@ -14,7 +14,7 @@ import org.junit.jupiter.api.Test
 
 internal class AccountServiceAsyncTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun create() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -35,7 +35,7 @@ internal class AccountServiceAsyncTest {
         account.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -47,7 +47,7 @@ internal class AccountServiceAsyncTest {
         account.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -62,7 +62,7 @@ internal class AccountServiceAsyncTest {
         accounts.forEach { it.validate() }
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun close() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -74,7 +74,7 @@ internal class AccountServiceAsyncTest {
         account.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun deposit() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -93,7 +93,7 @@ internal class AccountServiceAsyncTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun transfer() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -113,7 +113,7 @@ internal class AccountServiceAsyncTest {
         response.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun updateStatus() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
@@ -131,7 +131,7 @@ internal class AccountServiceAsyncTest {
         account.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun withdraw() {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()

@@ -10,7 +10,7 @@ import org.junit.jupiter.api.Test
 
 internal class TransactionServiceTest {
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun retrieve() {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
@@ -21,7 +21,7 @@ internal class TransactionServiceTest {
         transaction.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun list() {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
@@ -39,7 +39,7 @@ internal class TransactionServiceTest {
         transactions.validate()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
     fun listByAccount() {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
