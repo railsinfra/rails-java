@@ -1,3 +1,5 @@
+// File generated from our OpenAPI spec by Stainless.
+
 package com.rails.api.core.http
 
 import com.rails.api.core.DefaultSleeper
