@@ -44,10 +44,13 @@ interface RailsClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient
 
+    /** Users */
     fun users(): UserService
 
+    /** Accounts */
     fun accounts(): AccountService
 
+    /** Transactions */
     fun transactions(): TransactionService
 
     /**
@@ -73,10 +76,13 @@ interface RailsClient {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient.WithRawResponse
 
+        /** Users */
         fun users(): UserService.WithRawResponse
 
+        /** Accounts */
         fun accounts(): AccountService.WithRawResponse
 
+        /** Transactions */
         fun transactions(): TransactionService.WithRawResponse
     }
 }

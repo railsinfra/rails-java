@@ -46,10 +46,13 @@ class RailsClientAsyncImpl(private val clientOptions: ClientOptions) : RailsClie
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync =
         RailsClientAsyncImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
+    /** Users */
     override fun users(): UserServiceAsync = users
 
+    /** Accounts */
     override fun accounts(): AccountServiceAsync = accounts
 
+    /** Transactions */
     override fun transactions(): TransactionServiceAsync = transactions
 
     override fun close() = clientOptions.close()
@@ -76,10 +79,13 @@ class RailsClientAsyncImpl(private val clientOptions: ClientOptions) : RailsClie
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
+        /** Users */
         override fun users(): UserServiceAsync.WithRawResponse = users
 
+        /** Accounts */
         override fun accounts(): AccountServiceAsync.WithRawResponse = accounts
 
+        /** Transactions */
         override fun transactions(): TransactionServiceAsync.WithRawResponse = transactions
     }
 }

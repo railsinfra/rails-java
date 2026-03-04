@@ -13,6 +13,7 @@ import com.rails.api.models.transactions.TransactionRetrieveParams
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Transactions */
 interface TransactionServiceAsync {
 
     /**

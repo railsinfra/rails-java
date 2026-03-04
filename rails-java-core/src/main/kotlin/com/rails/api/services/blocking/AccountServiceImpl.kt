@@ -31,6 +31,7 @@ import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Accounts */
 class AccountServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     AccountService {
 

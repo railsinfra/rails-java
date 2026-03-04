@@ -10,6 +10,7 @@ import com.rails.api.models.users.UserCreateResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Users */
 interface UserServiceAsync {
 
     /**
