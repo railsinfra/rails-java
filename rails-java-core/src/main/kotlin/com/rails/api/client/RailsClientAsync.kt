@@ -44,10 +44,13 @@ interface RailsClientAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync
 
+    /** Users */
     fun users(): UserServiceAsync
 
+    /** Accounts */
     fun accounts(): AccountServiceAsync
 
+    /** Transactions */
     fun transactions(): TransactionServiceAsync
 
     /**
@@ -73,10 +76,13 @@ interface RailsClientAsync {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync.WithRawResponse
 
+        /** Users */
         fun users(): UserServiceAsync.WithRawResponse
 
+        /** Accounts */
         fun accounts(): AccountServiceAsync.WithRawResponse
 
+        /** Transactions */
         fun transactions(): TransactionServiceAsync.WithRawResponse
     }
 }

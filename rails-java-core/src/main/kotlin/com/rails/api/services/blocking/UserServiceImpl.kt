@@ -19,6 +19,7 @@ import com.rails.api.models.users.UserCreateParams
 import com.rails.api.models.users.UserCreateResponse
 import java.util.function.Consumer
 
+/** Users */
 class UserServiceImpl internal constructor(private val clientOptions: ClientOptions) : UserService {
 
     private val withRawResponse: UserService.WithRawResponse by lazy {

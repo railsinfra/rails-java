@@ -20,6 +20,7 @@ import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.concurrent.CompletableFuture
 import java.util.function.Consumer
 
+/** Accounts */
 interface AccountServiceAsync {
 
     /**

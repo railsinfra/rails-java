@@ -13,6 +13,7 @@ import com.rails.api.models.transactions.TransactionListResponse
 import com.rails.api.models.transactions.TransactionRetrieveParams
 import java.util.function.Consumer
 
+/** Transactions */
 interface TransactionService {
 
     /**

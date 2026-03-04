@@ -23,6 +23,7 @@ import com.rails.api.models.transactions.TransactionRetrieveParams
 import java.util.function.Consumer
 import kotlin.jvm.optionals.getOrNull
 
+/** Transactions */
 class TransactionServiceImpl internal constructor(private val clientOptions: ClientOptions) :
     TransactionService {
 

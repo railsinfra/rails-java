@@ -20,6 +20,7 @@ import com.rails.api.models.accounts.AccountWithdrawParams
 import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.function.Consumer
 
+/** Accounts */
 interface AccountService {
 
     /**
