@@ -22,7 +22,7 @@ import com.rails.api.errors.RateLimitException
 import com.rails.api.errors.UnauthorizedException
 import com.rails.api.errors.UnexpectedStatusCodeException
 import com.rails.api.errors.UnprocessableEntityException
-import com.rails.api.models.users.UserCreateParams
+import com.rails.api.models.accounts.AccountCreateParams
 import org.assertj.core.api.Assertions.assertThat
 import org.assertj.core.api.Assertions.entry
 import org.junit.jupiter.api.BeforeEach
@@ -59,8 +59,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate400() {
-        val userService = client.users()
+    fun accountsCreate400() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -70,13 +70,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -87,8 +90,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate400WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate400WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -98,13 +101,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<BadRequestException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -115,8 +121,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate401() {
-        val userService = client.users()
+    fun accountsCreate401() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -126,13 +132,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -143,8 +152,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate401WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate401WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -154,13 +163,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnauthorizedException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -171,8 +183,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate403() {
-        val userService = client.users()
+    fun accountsCreate403() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -182,13 +194,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -199,8 +214,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate403WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate403WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -210,13 +225,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<PermissionDeniedException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -227,8 +245,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate404() {
-        val userService = client.users()
+    fun accountsCreate404() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -238,13 +256,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -255,8 +276,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate404WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate404WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -266,13 +287,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<NotFoundException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -283,8 +307,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate422() {
-        val userService = client.users()
+    fun accountsCreate422() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -294,13 +318,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -311,8 +338,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate422WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate422WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -322,13 +349,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnprocessableEntityException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -339,8 +369,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate429() {
-        val userService = client.users()
+    fun accountsCreate429() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -350,13 +380,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -367,8 +400,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate429WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate429WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -378,13 +411,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RateLimitException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -395,8 +431,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate500() {
-        val userService = client.users()
+    fun accountsCreate500() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -406,13 +442,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -423,8 +462,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate500WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate500WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -434,13 +473,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<InternalServerException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -451,8 +493,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate999() {
-        val userService = client.users()
+    fun accountsCreate999() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -462,13 +504,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -479,8 +524,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreate999WithRawResponse() {
-        val userService = client.users().withRawResponse()
+    fun accountsCreate999WithRawResponse() {
+        val accountService = client.accounts().withRawResponse()
         stubFor(
             post(anyUrl())
                 .willReturn(
@@ -490,13 +535,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<UnexpectedStatusCodeException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }
@@ -507,8 +555,8 @@ internal class ErrorHandlingTest {
     }
 
     @Test
-    fun usersCreateInvalidJsonBody() {
-        val userService = client.users()
+    fun accountsCreateInvalidJsonBody() {
+        val accountService = client.accounts()
         stubFor(
             post(anyUrl())
                 .willReturn(status(200).withHeader(HEADER_NAME, HEADER_VALUE).withBody(NOT_JSON))
@@ -516,13 +564,16 @@ internal class ErrorHandlingTest {
 
         val e =
             assertThrows<RailsException> {
-                userService.create(
-                    UserCreateParams.builder()
-                        .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                accountService.create(
+                    AccountCreateParams.builder()
+                        .accountType(AccountCreateParams.AccountType.CHECKING)
+                        .currency("currency")
                         .email("dev@stainless.com")
+                        .environment("environment")
                         .firstName("first_name")
                         .lastName("last_name")
-                        .password("password")
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                         .build()
                 )
             }

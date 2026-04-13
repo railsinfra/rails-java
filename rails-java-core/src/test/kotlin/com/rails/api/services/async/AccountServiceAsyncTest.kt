@@ -24,10 +24,13 @@ internal class AccountServiceAsyncTest {
             accountServiceAsync.create(
                 AccountCreateParams.builder()
                     .accountType(AccountCreateParams.AccountType.CHECKING)
-                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .currency("currency")
+                    .email("dev@stainless.com")
                     .environment("environment")
+                    .firstName("first_name")
+                    .lastName("last_name")
                     .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
 
@@ -68,10 +71,10 @@ internal class AccountServiceAsyncTest {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val accountServiceAsync = client.accounts()
 
-        val accountFuture = accountServiceAsync.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val responseFuture = accountServiceAsync.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
-        val account = accountFuture.get()
-        account.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -119,7 +122,7 @@ internal class AccountServiceAsyncTest {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val accountServiceAsync = client.accounts()
 
-        val accountFuture =
+        val responseFuture =
             accountServiceAsync.updateStatus(
                 AccountUpdateStatusParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -127,8 +130,8 @@ internal class AccountServiceAsyncTest {
                     .build()
             )
 
-        val account = accountFuture.get()
-        account.validate()
+        val response = responseFuture.get()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")

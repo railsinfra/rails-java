@@ -5,16 +5,20 @@ package com.rails.api.services.async
 import com.rails.api.core.ClientOptions
 import com.rails.api.core.RequestOptions
 import com.rails.api.core.http.HttpResponseFor
-import com.rails.api.models.accounts.Account
 import com.rails.api.models.accounts.AccountCloseParams
+import com.rails.api.models.accounts.AccountCloseResponse
 import com.rails.api.models.accounts.AccountCreateParams
+import com.rails.api.models.accounts.AccountCreateResponse
 import com.rails.api.models.accounts.AccountDepositParams
 import com.rails.api.models.accounts.AccountDepositResponse
 import com.rails.api.models.accounts.AccountListParams
+import com.rails.api.models.accounts.AccountListResponse
 import com.rails.api.models.accounts.AccountRetrieveParams
+import com.rails.api.models.accounts.AccountRetrieveResponse
 import com.rails.api.models.accounts.AccountTransferParams
 import com.rails.api.models.accounts.AccountTransferResponse
 import com.rails.api.models.accounts.AccountUpdateStatusParams
+import com.rails.api.models.accounts.AccountUpdateStatusResponse
 import com.rails.api.models.accounts.AccountWithdrawParams
 import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.concurrent.CompletableFuture
@@ -36,17 +40,17 @@ interface AccountServiceAsync {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AccountServiceAsync
 
     /** Create account */
-    fun create(params: AccountCreateParams): CompletableFuture<Account> =
+    fun create(params: AccountCreateParams): CompletableFuture<AccountCreateResponse> =
         create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: AccountCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account>
+    ): CompletableFuture<AccountCreateResponse>
 
     /** Retrieve account */
-    fun retrieve(id: String): CompletableFuture<Account> =
+    fun retrieve(id: String): CompletableFuture<AccountRetrieveResponse> =
         retrieve(id, AccountRetrieveParams.none())
 
     /** @see retrieve */
@@ -54,66 +58,72 @@ interface AccountServiceAsync {
         id: String,
         params: AccountRetrieveParams = AccountRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account> = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): CompletableFuture<AccountRetrieveResponse> =
+        retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         id: String,
         params: AccountRetrieveParams = AccountRetrieveParams.none(),
-    ): CompletableFuture<Account> = retrieve(id, params, RequestOptions.none())
+    ): CompletableFuture<AccountRetrieveResponse> = retrieve(id, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: AccountRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account>
+    ): CompletableFuture<AccountRetrieveResponse>
 
     /** @see retrieve */
-    fun retrieve(params: AccountRetrieveParams): CompletableFuture<Account> =
+    fun retrieve(params: AccountRetrieveParams): CompletableFuture<AccountRetrieveResponse> =
         retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(id: String, requestOptions: RequestOptions): CompletableFuture<Account> =
+    fun retrieve(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<AccountRetrieveResponse> =
         retrieve(id, AccountRetrieveParams.none(), requestOptions)
 
     /** List accounts */
-    fun list(params: AccountListParams): CompletableFuture<List<Account>> =
+    fun list(params: AccountListParams): CompletableFuture<List<AccountListResponse>> =
         list(params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: AccountListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<List<Account>>
+    ): CompletableFuture<List<AccountListResponse>>
 
     /** Close account */
-    fun close(id: String): CompletableFuture<Account> = close(id, AccountCloseParams.none())
+    fun close(id: String): CompletableFuture<AccountCloseResponse> =
+        close(id, AccountCloseParams.none())
 
     /** @see close */
     fun close(
         id: String,
         params: AccountCloseParams = AccountCloseParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account> = close(params.toBuilder().id(id).build(), requestOptions)
+    ): CompletableFuture<AccountCloseResponse> =
+        close(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see close */
     fun close(
         id: String,
         params: AccountCloseParams = AccountCloseParams.none(),
-    ): CompletableFuture<Account> = close(id, params, RequestOptions.none())
+    ): CompletableFuture<AccountCloseResponse> = close(id, params, RequestOptions.none())
 
     /** @see close */
     fun close(
         params: AccountCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account>
+    ): CompletableFuture<AccountCloseResponse>
 
     /** @see close */
-    fun close(params: AccountCloseParams): CompletableFuture<Account> =
+    fun close(params: AccountCloseParams): CompletableFuture<AccountCloseResponse> =
         close(params, RequestOptions.none())
 
     /** @see close */
-    fun close(id: String, requestOptions: RequestOptions): CompletableFuture<Account> =
+    fun close(id: String, requestOptions: RequestOptions): CompletableFuture<AccountCloseResponse> =
         close(id, AccountCloseParams.none(), requestOptions)
 
     /** Deposit into account */
@@ -165,7 +175,7 @@ interface AccountServiceAsync {
     ): CompletableFuture<AccountTransferResponse>
 
     /** Update account status */
-    fun updateStatus(id: String): CompletableFuture<Account> =
+    fun updateStatus(id: String): CompletableFuture<AccountUpdateStatusResponse> =
         updateStatus(id, AccountUpdateStatusParams.none())
 
     /** @see updateStatus */
@@ -173,26 +183,32 @@ interface AccountServiceAsync {
         id: String,
         params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account> = updateStatus(params.toBuilder().id(id).build(), requestOptions)
+    ): CompletableFuture<AccountUpdateStatusResponse> =
+        updateStatus(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see updateStatus */
     fun updateStatus(
         id: String,
         params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
-    ): CompletableFuture<Account> = updateStatus(id, params, RequestOptions.none())
+    ): CompletableFuture<AccountUpdateStatusResponse> =
+        updateStatus(id, params, RequestOptions.none())
 
     /** @see updateStatus */
     fun updateStatus(
         params: AccountUpdateStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): CompletableFuture<Account>
+    ): CompletableFuture<AccountUpdateStatusResponse>
 
     /** @see updateStatus */
-    fun updateStatus(params: AccountUpdateStatusParams): CompletableFuture<Account> =
-        updateStatus(params, RequestOptions.none())
+    fun updateStatus(
+        params: AccountUpdateStatusParams
+    ): CompletableFuture<AccountUpdateStatusResponse> = updateStatus(params, RequestOptions.none())
 
     /** @see updateStatus */
-    fun updateStatus(id: String, requestOptions: RequestOptions): CompletableFuture<Account> =
+    fun updateStatus(
+        id: String,
+        requestOptions: RequestOptions,
+    ): CompletableFuture<AccountUpdateStatusResponse> =
         updateStatus(id, AccountUpdateStatusParams.none(), requestOptions)
 
     /** Withdraw from account */
@@ -237,20 +253,22 @@ interface AccountServiceAsync {
          * Returns a raw HTTP response for `post /api/v1/accounts`, but is otherwise the same as
          * [AccountServiceAsync.create].
          */
-        fun create(params: AccountCreateParams): CompletableFuture<HttpResponseFor<Account>> =
+        fun create(
+            params: AccountCreateParams
+        ): CompletableFuture<HttpResponseFor<AccountCreateResponse>> =
             create(params, RequestOptions.none())
 
         /** @see create */
         fun create(
             params: AccountCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>>
+        ): CompletableFuture<HttpResponseFor<AccountCreateResponse>>
 
         /**
          * Returns a raw HTTP response for `get /api/v1/accounts/{id}`, but is otherwise the same as
          * [AccountServiceAsync.retrieve].
          */
-        fun retrieve(id: String): CompletableFuture<HttpResponseFor<Account>> =
+        fun retrieve(id: String): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> =
             retrieve(id, AccountRetrieveParams.none())
 
         /** @see retrieve */
@@ -258,50 +276,55 @@ interface AccountServiceAsync {
             id: String,
             params: AccountRetrieveParams = AccountRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> =
             retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
         fun retrieve(
             id: String,
             params: AccountRetrieveParams = AccountRetrieveParams.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> = retrieve(id, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> =
+            retrieve(id, params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             params: AccountRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>>
+        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>>
 
         /** @see retrieve */
-        fun retrieve(params: AccountRetrieveParams): CompletableFuture<HttpResponseFor<Account>> =
+        fun retrieve(
+            params: AccountRetrieveParams
+        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> =
             retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         fun retrieve(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountRetrieveResponse>> =
             retrieve(id, AccountRetrieveParams.none(), requestOptions)
 
         /**
          * Returns a raw HTTP response for `get /api/v1/accounts`, but is otherwise the same as
          * [AccountServiceAsync.list].
          */
-        fun list(params: AccountListParams): CompletableFuture<HttpResponseFor<List<Account>>> =
+        fun list(
+            params: AccountListParams
+        ): CompletableFuture<HttpResponseFor<List<AccountListResponse>>> =
             list(params, RequestOptions.none())
 
         /** @see list */
         fun list(
             params: AccountListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<List<Account>>>
+        ): CompletableFuture<HttpResponseFor<List<AccountListResponse>>>
 
         /**
          * Returns a raw HTTP response for `delete /api/v1/accounts/{id}`, but is otherwise the same
          * as [AccountServiceAsync.close].
          */
-        fun close(id: String): CompletableFuture<HttpResponseFor<Account>> =
+        fun close(id: String): CompletableFuture<HttpResponseFor<AccountCloseResponse>> =
             close(id, AccountCloseParams.none())
 
         /** @see close */
@@ -309,30 +332,33 @@ interface AccountServiceAsync {
             id: String,
             params: AccountCloseParams = AccountCloseParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>> =
             close(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see close */
         fun close(
             id: String,
             params: AccountCloseParams = AccountCloseParams.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> = close(id, params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>> =
+            close(id, params, RequestOptions.none())
 
         /** @see close */
         fun close(
             params: AccountCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>>
+        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>>
 
         /** @see close */
-        fun close(params: AccountCloseParams): CompletableFuture<HttpResponseFor<Account>> =
+        fun close(
+            params: AccountCloseParams
+        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>> =
             close(params, RequestOptions.none())
 
         /** @see close */
         fun close(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountCloseResponse>> =
             close(id, AccountCloseParams.none(), requestOptions)
 
         /**
@@ -399,7 +425,9 @@ interface AccountServiceAsync {
          * Returns a raw HTTP response for `patch /api/v1/accounts/{id}`, but is otherwise the same
          * as [AccountServiceAsync.updateStatus].
          */
-        fun updateStatus(id: String): CompletableFuture<HttpResponseFor<Account>> =
+        fun updateStatus(
+            id: String
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> =
             updateStatus(id, AccountUpdateStatusParams.none())
 
         /** @see updateStatus */
@@ -407,32 +435,33 @@ interface AccountServiceAsync {
             id: String,
             params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> =
             updateStatus(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see updateStatus */
         fun updateStatus(
             id: String,
             params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> =
             updateStatus(id, params, RequestOptions.none())
 
         /** @see updateStatus */
         fun updateStatus(
             params: AccountUpdateStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): CompletableFuture<HttpResponseFor<Account>>
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>>
 
         /** @see updateStatus */
         fun updateStatus(
             params: AccountUpdateStatusParams
-        ): CompletableFuture<HttpResponseFor<Account>> = updateStatus(params, RequestOptions.none())
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> =
+            updateStatus(params, RequestOptions.none())
 
         /** @see updateStatus */
         fun updateStatus(
             id: String,
             requestOptions: RequestOptions,
-        ): CompletableFuture<HttpResponseFor<Account>> =
+        ): CompletableFuture<HttpResponseFor<AccountUpdateStatusResponse>> =
             updateStatus(id, AccountUpdateStatusParams.none(), requestOptions)
 
         /**

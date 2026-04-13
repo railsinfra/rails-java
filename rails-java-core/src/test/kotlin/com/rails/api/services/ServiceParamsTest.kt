@@ -15,7 +15,7 @@ import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.rails.api.client.RailsClient
 import com.rails.api.client.okhttp.RailsOkHttpClient
 import com.rails.api.core.JsonValue
-import com.rails.api.models.users.UserCreateParams
+import com.rails.api.models.accounts.AccountCreateParams
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -39,16 +39,19 @@ internal class ServiceParamsTest {
     @Disabled("Mock server tests are disabled")
     @Test
     fun create() {
-        val userService = client.users()
+        val accountService = client.accounts()
         stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        userService.create(
-            UserCreateParams.builder()
-                .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+        accountService.create(
+            AccountCreateParams.builder()
+                .accountType(AccountCreateParams.AccountType.CHECKING)
+                .currency("currency")
                 .email("dev@stainless.com")
+                .environment("environment")
                 .firstName("first_name")
                 .lastName("last_name")
-                .password("password")
+                .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .putAdditionalHeader("Secret-Header", "42")
                 .putAdditionalQueryParam("secret_query_param", "42")
                 .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))

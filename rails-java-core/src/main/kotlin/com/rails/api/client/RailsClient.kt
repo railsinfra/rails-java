@@ -5,7 +5,6 @@ package com.rails.api.client
 import com.rails.api.core.ClientOptions
 import com.rails.api.services.blocking.AccountService
 import com.rails.api.services.blocking.TransactionService
-import com.rails.api.services.blocking.UserService
 import java.util.function.Consumer
 
 /**
@@ -44,9 +43,6 @@ interface RailsClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient
 
-    /** Users */
-    fun users(): UserService
-
     /** Accounts */
     fun accounts(): AccountService
 
@@ -75,9 +71,6 @@ interface RailsClient {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient.WithRawResponse
-
-        /** Users */
-        fun users(): UserService.WithRawResponse
 
         /** Accounts */
         fun accounts(): AccountService.WithRawResponse

@@ -36,16 +36,18 @@ private constructor(
     fun accountType(): AccountType = body.accountType()
 
     /**
-     * @throws RailsInvalidDataException if the JSON field has an unexpected type or is unexpectedly
-     *   missing or null (e.g. if the server responded with an unexpected value).
-     */
-    fun userId(): String = body.userId()
-
-    /**
      * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun currency(): Optional<String> = body.currency()
+
+    /**
+     * Holder-based: unique per org+env. Requires X-API-Key.
+     *
+     * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun email(): Optional<String> = body.email()
 
     /**
      * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -54,10 +56,34 @@ private constructor(
     fun environment(): Optional<String> = body.environment()
 
     /**
+     * Holder-based: holder first name.
+     *
+     * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun firstName(): Optional<String> = body.firstName()
+
+    /**
+     * Holder-based: holder last name.
+     *
+     * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun lastName(): Optional<String> = body.lastName()
+
+    /**
      * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
      *   server responded with an unexpected value).
      */
     fun organizationId(): Optional<String> = body.organizationId()
+
+    /**
+     * Legacy: platform user ID. Omit when using holder (email + names).
+     *
+     * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+     *   server responded with an unexpected value).
+     */
+    fun userId(): Optional<String> = body.userId()
 
     /**
      * Returns the raw JSON value of [accountType].
@@ -67,18 +93,18 @@ private constructor(
     fun _accountType(): JsonField<AccountType> = body._accountType()
 
     /**
-     * Returns the raw JSON value of [userId].
-     *
-     * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
-     */
-    fun _userId(): JsonField<String> = body._userId()
-
-    /**
      * Returns the raw JSON value of [currency].
      *
      * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _currency(): JsonField<String> = body._currency()
+
+    /**
+     * Returns the raw JSON value of [email].
+     *
+     * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _email(): JsonField<String> = body._email()
 
     /**
      * Returns the raw JSON value of [environment].
@@ -88,11 +114,32 @@ private constructor(
     fun _environment(): JsonField<String> = body._environment()
 
     /**
+     * Returns the raw JSON value of [firstName].
+     *
+     * Unlike [firstName], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _firstName(): JsonField<String> = body._firstName()
+
+    /**
+     * Returns the raw JSON value of [lastName].
+     *
+     * Unlike [lastName], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _lastName(): JsonField<String> = body._lastName()
+
+    /**
      * Returns the raw JSON value of [organizationId].
      *
      * Unlike [organizationId], this method doesn't throw if the JSON field has an unexpected type.
      */
     fun _organizationId(): JsonField<String> = body._organizationId()
+
+    /**
+     * Returns the raw JSON value of [userId].
+     *
+     * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
+     */
+    fun _userId(): JsonField<String> = body._userId()
 
     fun _additionalBodyProperties(): Map<String, JsonValue> = body._additionalProperties()
 
@@ -112,7 +159,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .accountType()
-         * .userId()
          * ```
          */
         @JvmStatic fun builder() = Builder()
@@ -138,10 +184,10 @@ private constructor(
          * This is generally only useful if you are already constructing the body separately.
          * Otherwise, it's more convenient to use the top-level setters instead:
          * - [accountType]
-         * - [userId]
          * - [currency]
+         * - [email]
          * - [environment]
-         * - [organizationId]
+         * - [firstName]
          * - etc.
          */
         fun body(body: Body) = apply { this.body = body.toBuilder() }
@@ -159,16 +205,6 @@ private constructor(
             body.accountType(accountType)
         }
 
-        fun userId(userId: String) = apply { body.userId(userId) }
-
-        /**
-         * Sets [Builder.userId] to an arbitrary JSON value.
-         *
-         * You should usually call [Builder.userId] with a well-typed [String] value instead. This
-         * method is primarily for setting the field to an undocumented or not yet supported value.
-         */
-        fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
-
         fun currency(currency: String) = apply { body.currency(currency) }
 
         /**
@@ -178,6 +214,20 @@ private constructor(
          * method is primarily for setting the field to an undocumented or not yet supported value.
          */
         fun currency(currency: JsonField<String>) = apply { body.currency(currency) }
+
+        /** Holder-based: unique per org+env. Requires X-API-Key. */
+        fun email(email: String?) = apply { body.email(email) }
+
+        /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+        fun email(email: Optional<String>) = email(email.getOrNull())
+
+        /**
+         * Sets [Builder.email] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.email] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun email(email: JsonField<String>) = apply { body.email(email) }
 
         fun environment(environment: String?) = apply { body.environment(environment) }
 
@@ -192,6 +242,35 @@ private constructor(
          * value.
          */
         fun environment(environment: JsonField<String>) = apply { body.environment(environment) }
+
+        /** Holder-based: holder first name. */
+        fun firstName(firstName: String?) = apply { body.firstName(firstName) }
+
+        /** Alias for calling [Builder.firstName] with `firstName.orElse(null)`. */
+        fun firstName(firstName: Optional<String>) = firstName(firstName.getOrNull())
+
+        /**
+         * Sets [Builder.firstName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.firstName] with a well-typed [String] value instead.
+         * This method is primarily for setting the field to an undocumented or not yet supported
+         * value.
+         */
+        fun firstName(firstName: JsonField<String>) = apply { body.firstName(firstName) }
+
+        /** Holder-based: holder last name. */
+        fun lastName(lastName: String?) = apply { body.lastName(lastName) }
+
+        /** Alias for calling [Builder.lastName] with `lastName.orElse(null)`. */
+        fun lastName(lastName: Optional<String>) = lastName(lastName.getOrNull())
+
+        /**
+         * Sets [Builder.lastName] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.lastName] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun lastName(lastName: JsonField<String>) = apply { body.lastName(lastName) }
 
         fun organizationId(organizationId: String?) = apply { body.organizationId(organizationId) }
 
@@ -209,6 +288,20 @@ private constructor(
         fun organizationId(organizationId: JsonField<String>) = apply {
             body.organizationId(organizationId)
         }
+
+        /** Legacy: platform user ID. Omit when using holder (email + names). */
+        fun userId(userId: String?) = apply { body.userId(userId) }
+
+        /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+        fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+        /**
+         * Sets [Builder.userId] to an arbitrary JSON value.
+         *
+         * You should usually call [Builder.userId] with a well-typed [String] value instead. This
+         * method is primarily for setting the field to an undocumented or not yet supported value.
+         */
+        fun userId(userId: JsonField<String>) = apply { body.userId(userId) }
 
         fun additionalBodyProperties(additionalBodyProperties: Map<String, JsonValue>) = apply {
             body.additionalProperties(additionalBodyProperties)
@@ -335,7 +428,6 @@ private constructor(
          * The following fields are required:
          * ```java
          * .accountType()
-         * .userId()
          * ```
          *
          * @throws IllegalStateException if any required field is unset.
@@ -354,14 +446,21 @@ private constructor(
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
+    /**
+     * Use either user_id (legacy platform user) or email + first_name + last_name (holder-based;
+     * requires X-API-Key). Max 1 checking and 1 saving per holder.
+     */
     class Body
     @JsonCreator(mode = JsonCreator.Mode.DISABLED)
     private constructor(
         private val accountType: JsonField<AccountType>,
-        private val userId: JsonField<String>,
         private val currency: JsonField<String>,
+        private val email: JsonField<String>,
         private val environment: JsonField<String>,
+        private val firstName: JsonField<String>,
+        private val lastName: JsonField<String>,
         private val organizationId: JsonField<String>,
+        private val userId: JsonField<String>,
         private val additionalProperties: MutableMap<String, JsonValue>,
     ) {
 
@@ -370,17 +469,34 @@ private constructor(
             @JsonProperty("account_type")
             @ExcludeMissing
             accountType: JsonField<AccountType> = JsonMissing.of(),
-            @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
             @JsonProperty("currency")
             @ExcludeMissing
             currency: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("email") @ExcludeMissing email: JsonField<String> = JsonMissing.of(),
             @JsonProperty("environment")
             @ExcludeMissing
             environment: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("first_name")
+            @ExcludeMissing
+            firstName: JsonField<String> = JsonMissing.of(),
+            @JsonProperty("last_name")
+            @ExcludeMissing
+            lastName: JsonField<String> = JsonMissing.of(),
             @JsonProperty("organization_id")
             @ExcludeMissing
             organizationId: JsonField<String> = JsonMissing.of(),
-        ) : this(accountType, userId, currency, environment, organizationId, mutableMapOf())
+            @JsonProperty("user_id") @ExcludeMissing userId: JsonField<String> = JsonMissing.of(),
+        ) : this(
+            accountType,
+            currency,
+            email,
+            environment,
+            firstName,
+            lastName,
+            organizationId,
+            userId,
+            mutableMapOf(),
+        )
 
         /**
          * @throws RailsInvalidDataException if the JSON field has an unexpected type or is
@@ -389,16 +505,18 @@ private constructor(
         fun accountType(): AccountType = accountType.getRequired("account_type")
 
         /**
-         * @throws RailsInvalidDataException if the JSON field has an unexpected type or is
-         *   unexpectedly missing or null (e.g. if the server responded with an unexpected value).
-         */
-        fun userId(): String = userId.getRequired("user_id")
-
-        /**
          * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun currency(): Optional<String> = currency.getOptional("currency")
+
+        /**
+         * Holder-based: unique per org+env. Requires X-API-Key.
+         *
+         * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun email(): Optional<String> = email.getOptional("email")
 
         /**
          * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
@@ -407,10 +525,34 @@ private constructor(
         fun environment(): Optional<String> = environment.getOptional("environment")
 
         /**
+         * Holder-based: holder first name.
+         *
+         * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun firstName(): Optional<String> = firstName.getOptional("first_name")
+
+        /**
+         * Holder-based: holder last name.
+         *
+         * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun lastName(): Optional<String> = lastName.getOptional("last_name")
+
+        /**
          * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
          *   server responded with an unexpected value).
          */
         fun organizationId(): Optional<String> = organizationId.getOptional("organization_id")
+
+        /**
+         * Legacy: platform user ID. Omit when using holder (email + names).
+         *
+         * @throws RailsInvalidDataException if the JSON field has an unexpected type (e.g. if the
+         *   server responded with an unexpected value).
+         */
+        fun userId(): Optional<String> = userId.getOptional("user_id")
 
         /**
          * Returns the raw JSON value of [accountType].
@@ -422,18 +564,18 @@ private constructor(
         fun _accountType(): JsonField<AccountType> = accountType
 
         /**
-         * Returns the raw JSON value of [userId].
-         *
-         * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
-         */
-        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
-
-        /**
          * Returns the raw JSON value of [currency].
          *
          * Unlike [currency], this method doesn't throw if the JSON field has an unexpected type.
          */
         @JsonProperty("currency") @ExcludeMissing fun _currency(): JsonField<String> = currency
+
+        /**
+         * Returns the raw JSON value of [email].
+         *
+         * Unlike [email], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("email") @ExcludeMissing fun _email(): JsonField<String> = email
 
         /**
          * Returns the raw JSON value of [environment].
@@ -445,6 +587,20 @@ private constructor(
         fun _environment(): JsonField<String> = environment
 
         /**
+         * Returns the raw JSON value of [firstName].
+         *
+         * Unlike [firstName], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("first_name") @ExcludeMissing fun _firstName(): JsonField<String> = firstName
+
+        /**
+         * Returns the raw JSON value of [lastName].
+         *
+         * Unlike [lastName], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("last_name") @ExcludeMissing fun _lastName(): JsonField<String> = lastName
+
+        /**
          * Returns the raw JSON value of [organizationId].
          *
          * Unlike [organizationId], this method doesn't throw if the JSON field has an unexpected
@@ -453,6 +609,13 @@ private constructor(
         @JsonProperty("organization_id")
         @ExcludeMissing
         fun _organizationId(): JsonField<String> = organizationId
+
+        /**
+         * Returns the raw JSON value of [userId].
+         *
+         * Unlike [userId], this method doesn't throw if the JSON field has an unexpected type.
+         */
+        @JsonProperty("user_id") @ExcludeMissing fun _userId(): JsonField<String> = userId
 
         @JsonAnySetter
         private fun putAdditionalProperty(key: String, value: JsonValue) {
@@ -474,7 +637,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .accountType()
-             * .userId()
              * ```
              */
             @JvmStatic fun builder() = Builder()
@@ -484,19 +646,25 @@ private constructor(
         class Builder internal constructor() {
 
             private var accountType: JsonField<AccountType>? = null
-            private var userId: JsonField<String>? = null
             private var currency: JsonField<String> = JsonMissing.of()
+            private var email: JsonField<String> = JsonMissing.of()
             private var environment: JsonField<String> = JsonMissing.of()
+            private var firstName: JsonField<String> = JsonMissing.of()
+            private var lastName: JsonField<String> = JsonMissing.of()
             private var organizationId: JsonField<String> = JsonMissing.of()
+            private var userId: JsonField<String> = JsonMissing.of()
             private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
             @JvmSynthetic
             internal fun from(body: Body) = apply {
                 accountType = body.accountType
-                userId = body.userId
                 currency = body.currency
+                email = body.email
                 environment = body.environment
+                firstName = body.firstName
+                lastName = body.lastName
                 organizationId = body.organizationId
+                userId = body.userId
                 additionalProperties = body.additionalProperties.toMutableMap()
             }
 
@@ -513,17 +681,6 @@ private constructor(
                 this.accountType = accountType
             }
 
-            fun userId(userId: String) = userId(JsonField.of(userId))
-
-            /**
-             * Sets [Builder.userId] to an arbitrary JSON value.
-             *
-             * You should usually call [Builder.userId] with a well-typed [String] value instead.
-             * This method is primarily for setting the field to an undocumented or not yet
-             * supported value.
-             */
-            fun userId(userId: JsonField<String>) = apply { this.userId = userId }
-
             fun currency(currency: String) = currency(JsonField.of(currency))
 
             /**
@@ -534,6 +691,21 @@ private constructor(
              * supported value.
              */
             fun currency(currency: JsonField<String>) = apply { this.currency = currency }
+
+            /** Holder-based: unique per org+env. Requires X-API-Key. */
+            fun email(email: String?) = email(JsonField.ofNullable(email))
+
+            /** Alias for calling [Builder.email] with `email.orElse(null)`. */
+            fun email(email: Optional<String>) = email(email.getOrNull())
+
+            /**
+             * Sets [Builder.email] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.email] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun email(email: JsonField<String>) = apply { this.email = email }
 
             fun environment(environment: String?) = environment(JsonField.ofNullable(environment))
 
@@ -550,6 +722,36 @@ private constructor(
             fun environment(environment: JsonField<String>) = apply {
                 this.environment = environment
             }
+
+            /** Holder-based: holder first name. */
+            fun firstName(firstName: String?) = firstName(JsonField.ofNullable(firstName))
+
+            /** Alias for calling [Builder.firstName] with `firstName.orElse(null)`. */
+            fun firstName(firstName: Optional<String>) = firstName(firstName.getOrNull())
+
+            /**
+             * Sets [Builder.firstName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.firstName] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun firstName(firstName: JsonField<String>) = apply { this.firstName = firstName }
+
+            /** Holder-based: holder last name. */
+            fun lastName(lastName: String?) = lastName(JsonField.ofNullable(lastName))
+
+            /** Alias for calling [Builder.lastName] with `lastName.orElse(null)`. */
+            fun lastName(lastName: Optional<String>) = lastName(lastName.getOrNull())
+
+            /**
+             * Sets [Builder.lastName] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.lastName] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun lastName(lastName: JsonField<String>) = apply { this.lastName = lastName }
 
             fun organizationId(organizationId: String?) =
                 organizationId(JsonField.ofNullable(organizationId))
@@ -568,6 +770,21 @@ private constructor(
             fun organizationId(organizationId: JsonField<String>) = apply {
                 this.organizationId = organizationId
             }
+
+            /** Legacy: platform user ID. Omit when using holder (email + names). */
+            fun userId(userId: String?) = userId(JsonField.ofNullable(userId))
+
+            /** Alias for calling [Builder.userId] with `userId.orElse(null)`. */
+            fun userId(userId: Optional<String>) = userId(userId.getOrNull())
+
+            /**
+             * Sets [Builder.userId] to an arbitrary JSON value.
+             *
+             * You should usually call [Builder.userId] with a well-typed [String] value instead.
+             * This method is primarily for setting the field to an undocumented or not yet
+             * supported value.
+             */
+            fun userId(userId: JsonField<String>) = apply { this.userId = userId }
 
             fun additionalProperties(additionalProperties: Map<String, JsonValue>) = apply {
                 this.additionalProperties.clear()
@@ -596,7 +813,6 @@ private constructor(
              * The following fields are required:
              * ```java
              * .accountType()
-             * .userId()
              * ```
              *
              * @throws IllegalStateException if any required field is unset.
@@ -604,10 +820,13 @@ private constructor(
             fun build(): Body =
                 Body(
                     checkRequired("accountType", accountType),
-                    checkRequired("userId", userId),
                     currency,
+                    email,
                     environment,
+                    firstName,
+                    lastName,
                     organizationId,
+                    userId,
                     additionalProperties.toMutableMap(),
                 )
         }
@@ -620,10 +839,13 @@ private constructor(
             }
 
             accountType().validate()
-            userId()
             currency()
+            email()
             environment()
+            firstName()
+            lastName()
             organizationId()
+            userId()
             validated = true
         }
 
@@ -644,10 +866,13 @@ private constructor(
         @JvmSynthetic
         internal fun validity(): Int =
             (accountType.asKnown().getOrNull()?.validity() ?: 0) +
-                (if (userId.asKnown().isPresent) 1 else 0) +
                 (if (currency.asKnown().isPresent) 1 else 0) +
+                (if (email.asKnown().isPresent) 1 else 0) +
                 (if (environment.asKnown().isPresent) 1 else 0) +
-                (if (organizationId.asKnown().isPresent) 1 else 0)
+                (if (firstName.asKnown().isPresent) 1 else 0) +
+                (if (lastName.asKnown().isPresent) 1 else 0) +
+                (if (organizationId.asKnown().isPresent) 1 else 0) +
+                (if (userId.asKnown().isPresent) 1 else 0)
 
         override fun equals(other: Any?): Boolean {
             if (this === other) {
@@ -656,20 +881,26 @@ private constructor(
 
             return other is Body &&
                 accountType == other.accountType &&
-                userId == other.userId &&
                 currency == other.currency &&
+                email == other.email &&
                 environment == other.environment &&
+                firstName == other.firstName &&
+                lastName == other.lastName &&
                 organizationId == other.organizationId &&
+                userId == other.userId &&
                 additionalProperties == other.additionalProperties
         }
 
         private val hashCode: Int by lazy {
             Objects.hash(
                 accountType,
-                userId,
                 currency,
+                email,
                 environment,
+                firstName,
+                lastName,
                 organizationId,
+                userId,
                 additionalProperties,
             )
         }
@@ -677,7 +908,7 @@ private constructor(
         override fun hashCode(): Int = hashCode
 
         override fun toString() =
-            "Body{accountType=$accountType, userId=$userId, currency=$currency, environment=$environment, organizationId=$organizationId, additionalProperties=$additionalProperties}"
+            "Body{accountType=$accountType, currency=$currency, email=$email, environment=$environment, firstName=$firstName, lastName=$lastName, organizationId=$organizationId, userId=$userId, additionalProperties=$additionalProperties}"
     }
 
     class AccountType @JsonCreator private constructor(private val value: JsonField<String>) :

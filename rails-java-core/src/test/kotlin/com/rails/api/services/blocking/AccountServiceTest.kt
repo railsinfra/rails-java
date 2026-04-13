@@ -24,10 +24,13 @@ internal class AccountServiceTest {
             accountService.create(
                 AccountCreateParams.builder()
                     .accountType(AccountCreateParams.AccountType.CHECKING)
-                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .currency("currency")
+                    .email("dev@stainless.com")
                     .environment("environment")
+                    .firstName("first_name")
+                    .lastName("last_name")
                     .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .build()
             )
 
@@ -65,9 +68,9 @@ internal class AccountServiceTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
-        val account = accountService.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val response = accountService.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
 
-        account.validate()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
@@ -113,7 +116,7 @@ internal class AccountServiceTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
-        val account =
+        val response =
             accountService.updateStatus(
                 AccountUpdateStatusParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -121,7 +124,7 @@ internal class AccountServiceTest {
                     .build()
             )
 
-        account.validate()
+        response.validate()
     }
 
     @Disabled("Mock server tests are disabled")
