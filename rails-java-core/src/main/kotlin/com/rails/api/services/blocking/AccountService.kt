@@ -6,16 +6,20 @@ import com.google.errorprone.annotations.MustBeClosed
 import com.rails.api.core.ClientOptions
 import com.rails.api.core.RequestOptions
 import com.rails.api.core.http.HttpResponseFor
-import com.rails.api.models.accounts.Account
 import com.rails.api.models.accounts.AccountCloseParams
+import com.rails.api.models.accounts.AccountCloseResponse
 import com.rails.api.models.accounts.AccountCreateParams
+import com.rails.api.models.accounts.AccountCreateResponse
 import com.rails.api.models.accounts.AccountDepositParams
 import com.rails.api.models.accounts.AccountDepositResponse
 import com.rails.api.models.accounts.AccountListParams
+import com.rails.api.models.accounts.AccountListResponse
 import com.rails.api.models.accounts.AccountRetrieveParams
+import com.rails.api.models.accounts.AccountRetrieveResponse
 import com.rails.api.models.accounts.AccountTransferParams
 import com.rails.api.models.accounts.AccountTransferResponse
 import com.rails.api.models.accounts.AccountUpdateStatusParams
+import com.rails.api.models.accounts.AccountUpdateStatusResponse
 import com.rails.api.models.accounts.AccountWithdrawParams
 import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.function.Consumer
@@ -36,77 +40,83 @@ interface AccountService {
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): AccountService
 
     /** Create account */
-    fun create(params: AccountCreateParams): Account = create(params, RequestOptions.none())
+    fun create(params: AccountCreateParams): AccountCreateResponse =
+        create(params, RequestOptions.none())
 
     /** @see create */
     fun create(
         params: AccountCreateParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account
+    ): AccountCreateResponse
 
     /** Retrieve account */
-    fun retrieve(id: String): Account = retrieve(id, AccountRetrieveParams.none())
+    fun retrieve(id: String): AccountRetrieveResponse = retrieve(id, AccountRetrieveParams.none())
 
     /** @see retrieve */
     fun retrieve(
         id: String,
         params: AccountRetrieveParams = AccountRetrieveParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account = retrieve(params.toBuilder().id(id).build(), requestOptions)
+    ): AccountRetrieveResponse = retrieve(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see retrieve */
     fun retrieve(
         id: String,
         params: AccountRetrieveParams = AccountRetrieveParams.none(),
-    ): Account = retrieve(id, params, RequestOptions.none())
+    ): AccountRetrieveResponse = retrieve(id, params, RequestOptions.none())
 
     /** @see retrieve */
     fun retrieve(
         params: AccountRetrieveParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account
+    ): AccountRetrieveResponse
 
     /** @see retrieve */
-    fun retrieve(params: AccountRetrieveParams): Account = retrieve(params, RequestOptions.none())
+    fun retrieve(params: AccountRetrieveParams): AccountRetrieveResponse =
+        retrieve(params, RequestOptions.none())
 
     /** @see retrieve */
-    fun retrieve(id: String, requestOptions: RequestOptions): Account =
+    fun retrieve(id: String, requestOptions: RequestOptions): AccountRetrieveResponse =
         retrieve(id, AccountRetrieveParams.none(), requestOptions)
 
     /** List accounts */
-    fun list(params: AccountListParams): List<Account> = list(params, RequestOptions.none())
+    fun list(params: AccountListParams): List<AccountListResponse> =
+        list(params, RequestOptions.none())
 
     /** @see list */
     fun list(
         params: AccountListParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): List<Account>
+    ): List<AccountListResponse>
 
     /** Close account */
-    fun close(id: String): Account = close(id, AccountCloseParams.none())
+    fun close(id: String): AccountCloseResponse = close(id, AccountCloseParams.none())
 
     /** @see close */
     fun close(
         id: String,
         params: AccountCloseParams = AccountCloseParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account = close(params.toBuilder().id(id).build(), requestOptions)
+    ): AccountCloseResponse = close(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see close */
-    fun close(id: String, params: AccountCloseParams = AccountCloseParams.none()): Account =
-        close(id, params, RequestOptions.none())
+    fun close(
+        id: String,
+        params: AccountCloseParams = AccountCloseParams.none(),
+    ): AccountCloseResponse = close(id, params, RequestOptions.none())
 
     /** @see close */
     fun close(
         params: AccountCloseParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account
+    ): AccountCloseResponse
 
     /** @see close */
-    fun close(params: AccountCloseParams): Account = close(params, RequestOptions.none())
+    fun close(params: AccountCloseParams): AccountCloseResponse =
+        close(params, RequestOptions.none())
 
     /** @see close */
-    fun close(id: String, requestOptions: RequestOptions): Account =
+    fun close(id: String, requestOptions: RequestOptions): AccountCloseResponse =
         close(id, AccountCloseParams.none(), requestOptions)
 
     /** Deposit into account */
@@ -152,33 +162,34 @@ interface AccountService {
     ): AccountTransferResponse
 
     /** Update account status */
-    fun updateStatus(id: String): Account = updateStatus(id, AccountUpdateStatusParams.none())
+    fun updateStatus(id: String): AccountUpdateStatusResponse =
+        updateStatus(id, AccountUpdateStatusParams.none())
 
     /** @see updateStatus */
     fun updateStatus(
         id: String,
         params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account = updateStatus(params.toBuilder().id(id).build(), requestOptions)
+    ): AccountUpdateStatusResponse = updateStatus(params.toBuilder().id(id).build(), requestOptions)
 
     /** @see updateStatus */
     fun updateStatus(
         id: String,
         params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
-    ): Account = updateStatus(id, params, RequestOptions.none())
+    ): AccountUpdateStatusResponse = updateStatus(id, params, RequestOptions.none())
 
     /** @see updateStatus */
     fun updateStatus(
         params: AccountUpdateStatusParams,
         requestOptions: RequestOptions = RequestOptions.none(),
-    ): Account
+    ): AccountUpdateStatusResponse
 
     /** @see updateStatus */
-    fun updateStatus(params: AccountUpdateStatusParams): Account =
+    fun updateStatus(params: AccountUpdateStatusParams): AccountUpdateStatusResponse =
         updateStatus(params, RequestOptions.none())
 
     /** @see updateStatus */
-    fun updateStatus(id: String, requestOptions: RequestOptions): Account =
+    fun updateStatus(id: String, requestOptions: RequestOptions): AccountUpdateStatusResponse =
         updateStatus(id, AccountUpdateStatusParams.none(), requestOptions)
 
     /** Withdraw from account */
@@ -217,7 +228,7 @@ interface AccountService {
          * [AccountService.create].
          */
         @MustBeClosed
-        fun create(params: AccountCreateParams): HttpResponseFor<Account> =
+        fun create(params: AccountCreateParams): HttpResponseFor<AccountCreateResponse> =
             create(params, RequestOptions.none())
 
         /** @see create */
@@ -225,14 +236,14 @@ interface AccountService {
         fun create(
             params: AccountCreateParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account>
+        ): HttpResponseFor<AccountCreateResponse>
 
         /**
          * Returns a raw HTTP response for `get /api/v1/accounts/{id}`, but is otherwise the same as
          * [AccountService.retrieve].
          */
         @MustBeClosed
-        fun retrieve(id: String): HttpResponseFor<Account> =
+        fun retrieve(id: String): HttpResponseFor<AccountRetrieveResponse> =
             retrieve(id, AccountRetrieveParams.none())
 
         /** @see retrieve */
@@ -241,30 +252,34 @@ interface AccountService {
             id: String,
             params: AccountRetrieveParams = AccountRetrieveParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account> = retrieve(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<AccountRetrieveResponse> =
+            retrieve(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             id: String,
             params: AccountRetrieveParams = AccountRetrieveParams.none(),
-        ): HttpResponseFor<Account> = retrieve(id, params, RequestOptions.none())
+        ): HttpResponseFor<AccountRetrieveResponse> = retrieve(id, params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
         fun retrieve(
             params: AccountRetrieveParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account>
+        ): HttpResponseFor<AccountRetrieveResponse>
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(params: AccountRetrieveParams): HttpResponseFor<Account> =
+        fun retrieve(params: AccountRetrieveParams): HttpResponseFor<AccountRetrieveResponse> =
             retrieve(params, RequestOptions.none())
 
         /** @see retrieve */
         @MustBeClosed
-        fun retrieve(id: String, requestOptions: RequestOptions): HttpResponseFor<Account> =
+        fun retrieve(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AccountRetrieveResponse> =
             retrieve(id, AccountRetrieveParams.none(), requestOptions)
 
         /**
@@ -272,7 +287,7 @@ interface AccountService {
          * [AccountService.list].
          */
         @MustBeClosed
-        fun list(params: AccountListParams): HttpResponseFor<List<Account>> =
+        fun list(params: AccountListParams): HttpResponseFor<List<AccountListResponse>> =
             list(params, RequestOptions.none())
 
         /** @see list */
@@ -280,14 +295,15 @@ interface AccountService {
         fun list(
             params: AccountListParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<List<Account>>
+        ): HttpResponseFor<List<AccountListResponse>>
 
         /**
          * Returns a raw HTTP response for `delete /api/v1/accounts/{id}`, but is otherwise the same
          * as [AccountService.close].
          */
         @MustBeClosed
-        fun close(id: String): HttpResponseFor<Account> = close(id, AccountCloseParams.none())
+        fun close(id: String): HttpResponseFor<AccountCloseResponse> =
+            close(id, AccountCloseParams.none())
 
         /** @see close */
         @MustBeClosed
@@ -295,30 +311,34 @@ interface AccountService {
             id: String,
             params: AccountCloseParams = AccountCloseParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account> = close(params.toBuilder().id(id).build(), requestOptions)
+        ): HttpResponseFor<AccountCloseResponse> =
+            close(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see close */
         @MustBeClosed
         fun close(
             id: String,
             params: AccountCloseParams = AccountCloseParams.none(),
-        ): HttpResponseFor<Account> = close(id, params, RequestOptions.none())
+        ): HttpResponseFor<AccountCloseResponse> = close(id, params, RequestOptions.none())
 
         /** @see close */
         @MustBeClosed
         fun close(
             params: AccountCloseParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account>
+        ): HttpResponseFor<AccountCloseResponse>
 
         /** @see close */
         @MustBeClosed
-        fun close(params: AccountCloseParams): HttpResponseFor<Account> =
+        fun close(params: AccountCloseParams): HttpResponseFor<AccountCloseResponse> =
             close(params, RequestOptions.none())
 
         /** @see close */
         @MustBeClosed
-        fun close(id: String, requestOptions: RequestOptions): HttpResponseFor<Account> =
+        fun close(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AccountCloseResponse> =
             close(id, AccountCloseParams.none(), requestOptions)
 
         /**
@@ -388,7 +408,7 @@ interface AccountService {
          * as [AccountService.updateStatus].
          */
         @MustBeClosed
-        fun updateStatus(id: String): HttpResponseFor<Account> =
+        fun updateStatus(id: String): HttpResponseFor<AccountUpdateStatusResponse> =
             updateStatus(id, AccountUpdateStatusParams.none())
 
         /** @see updateStatus */
@@ -397,7 +417,7 @@ interface AccountService {
             id: String,
             params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account> =
+        ): HttpResponseFor<AccountUpdateStatusResponse> =
             updateStatus(params.toBuilder().id(id).build(), requestOptions)
 
         /** @see updateStatus */
@@ -405,23 +425,29 @@ interface AccountService {
         fun updateStatus(
             id: String,
             params: AccountUpdateStatusParams = AccountUpdateStatusParams.none(),
-        ): HttpResponseFor<Account> = updateStatus(id, params, RequestOptions.none())
+        ): HttpResponseFor<AccountUpdateStatusResponse> =
+            updateStatus(id, params, RequestOptions.none())
 
         /** @see updateStatus */
         @MustBeClosed
         fun updateStatus(
             params: AccountUpdateStatusParams,
             requestOptions: RequestOptions = RequestOptions.none(),
-        ): HttpResponseFor<Account>
+        ): HttpResponseFor<AccountUpdateStatusResponse>
 
         /** @see updateStatus */
         @MustBeClosed
-        fun updateStatus(params: AccountUpdateStatusParams): HttpResponseFor<Account> =
+        fun updateStatus(
+            params: AccountUpdateStatusParams
+        ): HttpResponseFor<AccountUpdateStatusResponse> =
             updateStatus(params, RequestOptions.none())
 
         /** @see updateStatus */
         @MustBeClosed
-        fun updateStatus(id: String, requestOptions: RequestOptions): HttpResponseFor<Account> =
+        fun updateStatus(
+            id: String,
+            requestOptions: RequestOptions,
+        ): HttpResponseFor<AccountUpdateStatusResponse> =
             updateStatus(id, AccountUpdateStatusParams.none(), requestOptions)
 
         /**

@@ -5,7 +5,6 @@ package com.rails.api.client
 import com.rails.api.core.ClientOptions
 import com.rails.api.services.async.AccountServiceAsync
 import com.rails.api.services.async.TransactionServiceAsync
-import com.rails.api.services.async.UserServiceAsync
 import java.util.function.Consumer
 
 /**
@@ -44,9 +43,6 @@ interface RailsClientAsync {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync
 
-    /** Users */
-    fun users(): UserServiceAsync
-
     /** Accounts */
     fun accounts(): AccountServiceAsync
 
@@ -75,9 +71,6 @@ interface RailsClientAsync {
          * The original service is not modified.
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClientAsync.WithRawResponse
-
-        /** Users */
-        fun users(): UserServiceAsync.WithRawResponse
 
         /** Accounts */
         fun accounts(): AccountServiceAsync.WithRawResponse

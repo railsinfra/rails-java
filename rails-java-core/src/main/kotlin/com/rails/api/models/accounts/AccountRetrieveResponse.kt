@@ -19,7 +19,7 @@ import java.util.Objects
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
-class Account
+class AccountRetrieveResponse
 @JsonCreator(mode = JsonCreator.Mode.DISABLED)
 private constructor(
     private val id: JsonField<String>,
@@ -280,7 +280,7 @@ private constructor(
     companion object {
 
         /**
-         * Returns a mutable builder for constructing an instance of [Account].
+         * Returns a mutable builder for constructing an instance of [AccountRetrieveResponse].
          *
          * The following fields are required:
          * ```java
@@ -297,7 +297,7 @@ private constructor(
         @JvmStatic fun builder() = Builder()
     }
 
-    /** A builder for [Account]. */
+    /** A builder for [AccountRetrieveResponse]. */
     class Builder internal constructor() {
 
         private var id: JsonField<String>? = null
@@ -316,21 +316,21 @@ private constructor(
         private var additionalProperties: MutableMap<String, JsonValue> = mutableMapOf()
 
         @JvmSynthetic
-        internal fun from(account: Account) = apply {
-            id = account.id
-            accountNumber = account.accountNumber
-            accountType = account.accountType
-            balance = account.balance
-            currency = account.currency
-            environment = account.environment
-            status = account.status
-            userId = account.userId
-            adminUserId = account.adminUserId
-            createdAt = account.createdAt
-            organizationId = account.organizationId
-            updatedAt = account.updatedAt
-            userRole = account.userRole
-            additionalProperties = account.additionalProperties.toMutableMap()
+        internal fun from(accountRetrieveResponse: AccountRetrieveResponse) = apply {
+            id = accountRetrieveResponse.id
+            accountNumber = accountRetrieveResponse.accountNumber
+            accountType = accountRetrieveResponse.accountType
+            balance = accountRetrieveResponse.balance
+            currency = accountRetrieveResponse.currency
+            environment = accountRetrieveResponse.environment
+            status = accountRetrieveResponse.status
+            userId = accountRetrieveResponse.userId
+            adminUserId = accountRetrieveResponse.adminUserId
+            createdAt = accountRetrieveResponse.createdAt
+            organizationId = accountRetrieveResponse.organizationId
+            updatedAt = accountRetrieveResponse.updatedAt
+            userRole = accountRetrieveResponse.userRole
+            additionalProperties = accountRetrieveResponse.additionalProperties.toMutableMap()
         }
 
         fun id(id: String) = id(JsonField.of(id))
@@ -513,7 +513,7 @@ private constructor(
         }
 
         /**
-         * Returns an immutable instance of [Account].
+         * Returns an immutable instance of [AccountRetrieveResponse].
          *
          * Further updates to this [Builder] will not mutate the returned instance.
          *
@@ -531,8 +531,8 @@ private constructor(
          *
          * @throws IllegalStateException if any required field is unset.
          */
-        fun build(): Account =
-            Account(
+        fun build(): AccountRetrieveResponse =
+            AccountRetrieveResponse(
                 checkRequired("id", id),
                 checkRequired("accountNumber", accountNumber),
                 checkRequired("accountType", accountType),
@@ -552,7 +552,7 @@ private constructor(
 
     private var validated: Boolean = false
 
-    fun validate(): Account = apply {
+    fun validate(): AccountRetrieveResponse = apply {
         if (validated) {
             return@apply
         }
@@ -864,7 +864,7 @@ private constructor(
             return true
         }
 
-        return other is Account &&
+        return other is AccountRetrieveResponse &&
             id == other.id &&
             accountNumber == other.accountNumber &&
             accountType == other.accountType &&
@@ -903,5 +903,5 @@ private constructor(
     override fun hashCode(): Int = hashCode
 
     override fun toString() =
-        "Account{id=$id, accountNumber=$accountNumber, accountType=$accountType, balance=$balance, currency=$currency, environment=$environment, status=$status, userId=$userId, adminUserId=$adminUserId, createdAt=$createdAt, organizationId=$organizationId, updatedAt=$updatedAt, userRole=$userRole, additionalProperties=$additionalProperties}"
+        "AccountRetrieveResponse{id=$id, accountNumber=$accountNumber, accountType=$accountType, balance=$balance, currency=$currency, environment=$environment, status=$status, userId=$userId, adminUserId=$adminUserId, createdAt=$createdAt, organizationId=$organizationId, updatedAt=$updatedAt, userRole=$userRole, additionalProperties=$additionalProperties}"
 }

@@ -5,7 +5,8 @@ package com.rails.api.proguard
 import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
 import com.rails.api.client.okhttp.RailsOkHttpClient
 import com.rails.api.core.jsonMapper
-import com.rails.api.models.users.UserCreateResponse
+import com.rails.api.models.accounts.AccountCreateResponse
+import java.time.OffsetDateTime
 import kotlin.reflect.full.memberFunctions
 import kotlin.reflect.jvm.javaMethod
 import org.assertj.core.api.Assertions.assertThat
@@ -47,26 +48,36 @@ internal class ProGuardCompatibilityTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
 
         assertThat(client).isNotNull()
-        assertThat(client.users()).isNotNull()
         assertThat(client.accounts()).isNotNull()
         assertThat(client.transactions()).isNotNull()
     }
 
     @Test
-    fun userCreateResponseRoundtrip() {
+    fun accountCreateResponseRoundtrip() {
         val jsonMapper = jsonMapper()
-        val userCreateResponse =
-            UserCreateResponse.builder()
-                .status("status")
+        val accountCreateResponse =
+            AccountCreateResponse.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .accountNumber("account_number")
+                .accountType(AccountCreateResponse.AccountType.CHECKING)
+                .balance("balance")
+                .currency("currency")
+                .environment("environment")
+                .status(AccountCreateResponse.Status.ACTIVE)
                 .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .adminUserId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                .userRole("user_role")
                 .build()
 
-        val roundtrippedUserCreateResponse =
+        val roundtrippedAccountCreateResponse =
             jsonMapper.readValue(
-                jsonMapper.writeValueAsString(userCreateResponse),
-                jacksonTypeRef<UserCreateResponse>(),
+                jsonMapper.writeValueAsString(accountCreateResponse),
+                jacksonTypeRef<AccountCreateResponse>(),
             )
 
-        assertThat(roundtrippedUserCreateResponse).isEqualTo(userCreateResponse)
+        assertThat(roundtrippedAccountCreateResponse).isEqualTo(accountCreateResponse)
     }
 }

@@ -16,16 +16,20 @@ import com.rails.api.core.http.HttpResponseFor
 import com.rails.api.core.http.json
 import com.rails.api.core.http.parseable
 import com.rails.api.core.prepare
-import com.rails.api.models.accounts.Account
 import com.rails.api.models.accounts.AccountCloseParams
+import com.rails.api.models.accounts.AccountCloseResponse
 import com.rails.api.models.accounts.AccountCreateParams
+import com.rails.api.models.accounts.AccountCreateResponse
 import com.rails.api.models.accounts.AccountDepositParams
 import com.rails.api.models.accounts.AccountDepositResponse
 import com.rails.api.models.accounts.AccountListParams
+import com.rails.api.models.accounts.AccountListResponse
 import com.rails.api.models.accounts.AccountRetrieveParams
+import com.rails.api.models.accounts.AccountRetrieveResponse
 import com.rails.api.models.accounts.AccountTransferParams
 import com.rails.api.models.accounts.AccountTransferResponse
 import com.rails.api.models.accounts.AccountUpdateStatusParams
+import com.rails.api.models.accounts.AccountUpdateStatusResponse
 import com.rails.api.models.accounts.AccountWithdrawParams
 import com.rails.api.models.accounts.AccountWithdrawResponse
 import java.util.function.Consumer
@@ -44,19 +48,31 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
     override fun withOptions(modifier: Consumer<ClientOptions.Builder>): AccountService =
         AccountServiceImpl(clientOptions.toBuilder().apply(modifier::accept).build())
 
-    override fun create(params: AccountCreateParams, requestOptions: RequestOptions): Account =
+    override fun create(
+        params: AccountCreateParams,
+        requestOptions: RequestOptions,
+    ): AccountCreateResponse =
         // post /api/v1/accounts
         withRawResponse().create(params, requestOptions).parse()
 
-    override fun retrieve(params: AccountRetrieveParams, requestOptions: RequestOptions): Account =
+    override fun retrieve(
+        params: AccountRetrieveParams,
+        requestOptions: RequestOptions,
+    ): AccountRetrieveResponse =
         // get /api/v1/accounts/{id}
         withRawResponse().retrieve(params, requestOptions).parse()
 
-    override fun list(params: AccountListParams, requestOptions: RequestOptions): List<Account> =
+    override fun list(
+        params: AccountListParams,
+        requestOptions: RequestOptions,
+    ): List<AccountListResponse> =
         // get /api/v1/accounts
         withRawResponse().list(params, requestOptions).parse()
 
-    override fun close(params: AccountCloseParams, requestOptions: RequestOptions): Account =
+    override fun close(
+        params: AccountCloseParams,
+        requestOptions: RequestOptions,
+    ): AccountCloseResponse =
         // delete /api/v1/accounts/{id}
         withRawResponse().close(params, requestOptions).parse()
 
@@ -77,7 +93,7 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
     override fun updateStatus(
         params: AccountUpdateStatusParams,
         requestOptions: RequestOptions,
-    ): Account =
+    ): AccountUpdateStatusResponse =
         // patch /api/v1/accounts/{id}
         withRawResponse().updateStatus(params, requestOptions).parse()
 
@@ -101,12 +117,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
                 clientOptions.toBuilder().apply(modifier::accept).build()
             )
 
-        private val createHandler: Handler<Account> = jsonHandler<Account>(clientOptions.jsonMapper)
+        private val createHandler: Handler<AccountCreateResponse> =
+            jsonHandler<AccountCreateResponse>(clientOptions.jsonMapper)
 
         override fun create(
             params: AccountCreateParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Account> {
+        ): HttpResponseFor<AccountCreateResponse> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.POST)
@@ -128,13 +145,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val retrieveHandler: Handler<Account> =
-            jsonHandler<Account>(clientOptions.jsonMapper)
+        private val retrieveHandler: Handler<AccountRetrieveResponse> =
+            jsonHandler<AccountRetrieveResponse>(clientOptions.jsonMapper)
 
         override fun retrieve(
             params: AccountRetrieveParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Account> {
+        ): HttpResponseFor<AccountRetrieveResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -158,13 +175,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val listHandler: Handler<List<Account>> =
-            jsonHandler<List<Account>>(clientOptions.jsonMapper)
+        private val listHandler: Handler<List<AccountListResponse>> =
+            jsonHandler<List<AccountListResponse>>(clientOptions.jsonMapper)
 
         override fun list(
             params: AccountListParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<List<Account>> {
+        ): HttpResponseFor<List<AccountListResponse>> {
             val request =
                 HttpRequest.builder()
                     .method(HttpMethod.GET)
@@ -185,12 +202,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val closeHandler: Handler<Account> = jsonHandler<Account>(clientOptions.jsonMapper)
+        private val closeHandler: Handler<AccountCloseResponse> =
+            jsonHandler<AccountCloseResponse>(clientOptions.jsonMapper)
 
         override fun close(
             params: AccountCloseParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Account> {
+        ): HttpResponseFor<AccountCloseResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())
@@ -277,13 +295,13 @@ class AccountServiceImpl internal constructor(private val clientOptions: ClientO
             }
         }
 
-        private val updateStatusHandler: Handler<Account> =
-            jsonHandler<Account>(clientOptions.jsonMapper)
+        private val updateStatusHandler: Handler<AccountUpdateStatusResponse> =
+            jsonHandler<AccountUpdateStatusResponse>(clientOptions.jsonMapper)
 
         override fun updateStatus(
             params: AccountUpdateStatusParams,
             requestOptions: RequestOptions,
-        ): HttpResponseFor<Account> {
+        ): HttpResponseFor<AccountUpdateStatusResponse> {
             // We check here instead of in the params builder because this can be specified
             // positionally or in the params class.
             checkRequired("id", params.id().getOrNull())

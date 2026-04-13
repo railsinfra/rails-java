@@ -36,21 +36,17 @@ This library requires Java 8 or later.
 ```java
 import com.rails.api.client.RailsClient;
 import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateParams;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-UserCreateResponse user = client.users().create(params);
+AccountCreateResponse account = client.accounts().create(params);
 ```
 
 ## Client configuration
@@ -123,7 +119,7 @@ The `withOptions()` method does not affect the original client or service.
 
 To send a request to the Rails API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.users().create(...)` should be called with an instance of `UserCreateParams`, and it will return an instance of `UserCreateResponse`.
+For example, `client.accounts().create(...)` should be called with an instance of `AccountCreateParams`, and it will return an instance of `AccountCreateResponse`.
 
 ## Immutability
 
@@ -140,22 +136,18 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.rails.api.client.RailsClient;
 import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateParams;
+import com.rails.api.models.accounts.AccountCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-CompletableFuture<UserCreateResponse> user = client.async().users().create(params);
+CompletableFuture<AccountCreateResponse> account = client.async().accounts().create(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -163,22 +155,18 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.rails.api.client.RailsClientAsync;
 import com.rails.api.client.okhttp.RailsOkHttpClientAsync;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateParams;
+import com.rails.api.models.accounts.AccountCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClientAsync client = RailsOkHttpClientAsync.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-CompletableFuture<UserCreateResponse> user = client.users().create(params);
+CompletableFuture<AccountCreateResponse> account = client.accounts().create(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -192,28 +180,24 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.rails.api.core.http.Headers;
 import com.rails.api.core.http.HttpResponseFor;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateParams;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-HttpResponseFor<UserCreateResponse> user = client.users().withRawResponse().create(params);
+HttpResponseFor<AccountCreateResponse> account = client.accounts().withRawResponse().create(params);
 
-int statusCode = user.statusCode();
-Headers headers = user.headers();
+int statusCode = account.statusCode();
+Headers headers = account.headers();
 ```
 
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
-UserCreateResponse parsedUser = user.parse();
+AccountCreateResponse parsedAccount = account.parse();
 ```
 
 ## Error handling
@@ -311,9 +295,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(
+AccountCreateResponse account = client.accounts().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 );
 ```
@@ -451,9 +435,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.rails.api.core.JsonValue;
-import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
+AccountCreateParams params = AccountCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -466,14 +450,10 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```java
 import com.rails.api.core.JsonValue;
-import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email(JsonValue.from(42))
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(JsonValue.from(42))
     .build();
 ```
 
@@ -522,14 +502,10 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](rails-ja
 
 ```java
 import com.rails.api.core.JsonMissing;
-import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
-    .email(JsonMissing.of())
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(JsonMissing.of())
     .build();
 ```
 
@@ -541,7 +517,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.rails.api.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.users().create(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.accounts().create(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -569,21 +545,22 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.rails.api.core.JsonField;
+import com.rails.api.models.accounts.AccountCreateParams;
 import java.util.Optional;
 
-JsonField<String> email = client.users().create(params)._email();
+JsonField<AccountCreateParams.AccountType> accountType = client.accounts().create(params)._accountType();
 
-if (email.isMissing()) {
+if (accountType.isMissing()) {
   // The property is absent from the JSON response
-} else if (email.isNull()) {
+} else if (accountType.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = email.asString();
+  Optional<String> jsonString = accountType.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = email.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = accountType.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
@@ -596,17 +573,17 @@ By default, the SDK will not throw an exception in this case. It will throw [`Ra
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(params).validate();
+AccountCreateResponse account = client.accounts().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.rails.api.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(
+AccountCreateResponse account = client.accounts().create(
   params, RequestOptions.builder().responseValidation(true).build()
 );
 ```
