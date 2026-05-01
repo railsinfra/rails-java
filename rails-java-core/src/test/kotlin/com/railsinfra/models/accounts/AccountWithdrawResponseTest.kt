@@ -1,0 +1,144 @@
+// File generated from our OpenAPI spec by Stainless.
+
+package com.railsinfra.models.accounts
+
+import com.fasterxml.jackson.module.kotlin.jacksonTypeRef
+import com.railsinfra.core.jsonMapper
+import java.time.OffsetDateTime
+import org.assertj.core.api.Assertions.assertThat
+import org.junit.jupiter.api.Test
+
+internal class AccountWithdrawResponseTest {
+
+    @Test
+    fun create() {
+        val accountWithdrawResponse =
+            AccountWithdrawResponse.builder()
+                .account(
+                    AccountWithdrawResponse.Account.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accountNumber("account_number")
+                        .accountType(AccountWithdrawResponse.Account.AccountType.CHECKING)
+                        .balance("balance")
+                        .currency("currency")
+                        .environment("environment")
+                        .status(AccountWithdrawResponse.Account.Status.ACTIVE)
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .adminUserId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .userRole("user_role")
+                        .build()
+                )
+                .transaction(
+                    AccountWithdrawResponse.Transaction.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .amount("amount")
+                        .balanceAfter("balance_after")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .currency("currency")
+                        .status(AccountWithdrawResponse.Transaction.Status.PENDING)
+                        .transactionType(
+                            AccountWithdrawResponse.Transaction.TransactionType.DEPOSIT
+                        )
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .description("description")
+                        .externalRecipientId("external_recipient_id")
+                        .recipientAccountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .referenceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
+                .build()
+
+        assertThat(accountWithdrawResponse.account())
+            .isEqualTo(
+                AccountWithdrawResponse.Account.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .accountNumber("account_number")
+                    .accountType(AccountWithdrawResponse.Account.AccountType.CHECKING)
+                    .balance("balance")
+                    .currency("currency")
+                    .environment("environment")
+                    .status(AccountWithdrawResponse.Account.Status.ACTIVE)
+                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .adminUserId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .userRole("user_role")
+                    .build()
+            )
+        assertThat(accountWithdrawResponse.transaction())
+            .isEqualTo(
+                AccountWithdrawResponse.Transaction.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .amount("amount")
+                    .balanceAfter("balance_after")
+                    .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .currency("currency")
+                    .status(AccountWithdrawResponse.Transaction.Status.PENDING)
+                    .transactionType(AccountWithdrawResponse.Transaction.TransactionType.DEPOSIT)
+                    .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .description("description")
+                    .externalRecipientId("external_recipient_id")
+                    .recipientAccountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .referenceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .build()
+            )
+    }
+
+    @Test
+    fun roundtrip() {
+        val jsonMapper = jsonMapper()
+        val accountWithdrawResponse =
+            AccountWithdrawResponse.builder()
+                .account(
+                    AccountWithdrawResponse.Account.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accountNumber("account_number")
+                        .accountType(AccountWithdrawResponse.Account.AccountType.CHECKING)
+                        .balance("balance")
+                        .currency("currency")
+                        .environment("environment")
+                        .status(AccountWithdrawResponse.Account.Status.ACTIVE)
+                        .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .adminUserId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .userRole("user_role")
+                        .build()
+                )
+                .transaction(
+                    AccountWithdrawResponse.Transaction.builder()
+                        .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .amount("amount")
+                        .balanceAfter("balance_after")
+                        .createdAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .currency("currency")
+                        .status(AccountWithdrawResponse.Transaction.Status.PENDING)
+                        .transactionType(
+                            AccountWithdrawResponse.Transaction.TransactionType.DEPOSIT
+                        )
+                        .updatedAt(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                        .description("description")
+                        .externalRecipientId("external_recipient_id")
+                        .recipientAccountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .referenceId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                        .build()
+                )
+                .build()
+
+        val roundtrippedAccountWithdrawResponse =
+            jsonMapper.readValue(
+                jsonMapper.writeValueAsString(accountWithdrawResponse),
+                jacksonTypeRef<AccountWithdrawResponse>(),
+            )
+
+        assertThat(roundtrippedAccountWithdrawResponse).isEqualTo(accountWithdrawResponse)
+    }
+}

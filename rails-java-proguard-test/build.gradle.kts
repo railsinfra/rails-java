@@ -18,7 +18,7 @@ dependencies {
     testImplementation(project(":rails-java"))
     testImplementation(kotlin("test"))
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.3")
-    testImplementation("org.assertj:assertj-core:3.25.3")
+    testImplementation("org.assertj:assertj-core:3.27.7")
     testImplementation("com.fasterxml.jackson.module:jackson-module-kotlin:2.14.0")
 }
 
@@ -59,7 +59,7 @@ val testProGuard by tasks.registering(JavaExec::class) {
     dependsOn(proguardJar)
     notCompatibleWithConfigurationCache("ProGuard")
 
-    mainClass.set("com.rails.api.proguard.ProGuardCompatibilityTest")
+    mainClass.set("com.railsinfra.proguard.ProGuardCompatibilityTest")
     classpath = files(proguardJarPath)
 }
 
@@ -89,7 +89,7 @@ val testR8 by tasks.registering(JavaExec::class) {
     dependsOn(r8Jar)
     notCompatibleWithConfigurationCache("R8")
 
-    mainClass.set("com.rails.api.proguard.ProGuardCompatibilityTest")
+    mainClass.set("com.railsinfra.proguard.ProGuardCompatibilityTest")
     classpath = files(r8JarPath)
 }
 

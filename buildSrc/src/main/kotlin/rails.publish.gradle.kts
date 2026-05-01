@@ -9,9 +9,9 @@ configure<PublishingExtension> {
             from(components["java"])
 
             pom {
-                name.set("OpenAPI 3.0 Pet Store")
-                description.set("This is a sample Pet Store Server based on the OpenAPI 3.0 specification.")
-                url.set("https://www.github.com/stainless-sdks/rails-java")
+                name.set("Rails API")
+                description.set("Rails public API. All endpoints require API key (X-API-Key). Environment must be\nexplicit: use sandbox or production base URL; there is no default to production.\nUnauthenticated access is not supported.")
+                url.set("https://github.com/railsinfra/rails-java")
 
                 licenses {
                     license {
@@ -26,9 +26,9 @@ configure<PublishingExtension> {
                 }
 
                 scm {
-                    connection.set("scm:git:git://github.com/stainless-sdks/rails-java.git")
-                    developerConnection.set("scm:git:git://github.com/stainless-sdks/rails-java.git")
-                    url.set("https://github.com/stainless-sdks/rails-java")
+                    connection.set("scm:git:git://github.com/railsinfra/rails-java.git")
+                    developerConnection.set("scm:git:git://github.com/railsinfra/rails-java.git")
+                    url.set("https://github.com/railsinfra/rails-java")
                 }
 
                 versionMapping {
@@ -61,8 +61,4 @@ signing {
         )
         sign(publishing.publications["maven"])
     }
-}
-
-tasks.named("publish") {
-    dependsOn(":closeAndReleaseSonatypeStagingRepository")
 }

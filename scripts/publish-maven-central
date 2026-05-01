@@ -1,0 +1,26 @@
+#!/usr/bin/env bash
+# Publish all Maven publications to OSSRH (Sonatype s01) and release to Maven Central.
+#
+# Prerequisites:
+#   - SONATYPE_USERNAME / SONATYPE_PASSWORD — Sonatype user token (or legacy user + token password)
+#   - GPG_SIGNING_KEY — ASCII-armored private key (often multiline; export from CI secret store)
+#   - GPG_SIGNING_PASSWORD — passphrase for that key
+#   - GPG_SIGNING_KEY_ID — optional short key id (8 hex chars); omit for single-secret-key setups
+#
+# The Gradle Nexus publish plugin is not compatible with the configuration cache; this script
+# forces --no-configuration-cache for the publish graph.
+
+set -euo pipefail
+
+cd "$(dirname "$0")/.."
+
+for v in SONATYPE_USERNAME SONATYPE_PASSWORD GPG_SIGNING_KEY GPG_SIGNING_PASSWORD; do
+  if [[ -z "${!v:-}" ]]; then
+    echo "error: environment variable $v is not set" >&2
+    exit 1
+  fi
+done
+
+exec ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository \
+  --no-configuration-cache \
+  "$@"

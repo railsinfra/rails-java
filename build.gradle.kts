@@ -8,7 +8,7 @@ repositories {
 }
 
 allprojects {
-    group = "com.rails.api"
+    group = "com.railsinfra"
     version = "0.0.1"
 }
 
