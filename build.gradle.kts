@@ -47,6 +47,13 @@ nexusPublishing {
 
             username.set(System.getenv("SONATYPE_USERNAME"))
             password.set(System.getenv("SONATYPE_PASSWORD"))
+
+            // If publish fails with "Failed to find staging profile for package group", set this to the
+            // profile id from: ./gradlew retrieveSonatypeStagingProfile --no-configuration-cache
+            // (requires SONATYPE_* env) or from Maven Central → Publishing in the portal UI.
+            System.getenv("SONATYPE_STAGING_PROFILE_ID")?.ifBlank { null }?.let { id ->
+                stagingProfileId.set(id)
+            }
         }
     }
 }
