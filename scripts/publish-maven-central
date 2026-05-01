@@ -3,7 +3,9 @@
 #
 # Prerequisites:
 #   - SONATYPE_USERNAME / SONATYPE_PASSWORD — Sonatype user token (or legacy user + token password)
-#   - GPG_SIGNING_KEY — ASCII-armored private key (often multiline; export from CI secret store)
+#   - GPG_SIGNING_KEY — ASCII-armored private key (multiline). In GitHub Actions, paste the full
+#     block into a repository secret, or use GPG_SIGNING_KEY_BASE64 (see below).
+#   - GPG_SIGNING_KEY_BASE64 — optional: same key, base64-encoded on one line (avoids multiline secret issues)
 #   - GPG_SIGNING_PASSWORD — passphrase for that key
 #   - GPG_SIGNING_KEY_ID — optional short key id (8 hex chars); omit for single-secret-key setups
 #
@@ -14,12 +16,23 @@ set -euo pipefail
 
 cd "$(dirname "$0")/.."
 
-for v in SONATYPE_USERNAME SONATYPE_PASSWORD GPG_SIGNING_KEY GPG_SIGNING_PASSWORD; do
+if [[ -z "${GPG_SIGNING_KEY:-}" && -n "${GPG_SIGNING_KEY_BASE64:-}" ]]; then
+  GPG_SIGNING_KEY="$(printf '%s' "${GPG_SIGNING_KEY_BASE64}" | base64 -d)"
+  export GPG_SIGNING_KEY
+fi
+
+for v in SONATYPE_USERNAME SONATYPE_PASSWORD GPG_SIGNING_PASSWORD; do
   if [[ -z "${!v:-}" ]]; then
     echo "error: environment variable $v is not set" >&2
     exit 1
   fi
 done
+
+if [[ -z "${GPG_SIGNING_KEY:-}" ]]; then
+  echo "error: GPG_SIGNING_KEY is empty. Add repo secret GPG_SIGNING_KEY (full armored private key)" >&2
+  echo "       or GPG_SIGNING_KEY_BASE64 (output of: base64 -w0 < secret-key.asc on Linux)." >&2
+  exit 1
+fi
 
 exec ./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository \
   --no-configuration-cache \
