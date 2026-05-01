@@ -105,15 +105,20 @@ private constructor(
     /**
      * The base URL to use for every request.
      *
-     * Defaults to the production environment: `https://petstore3.swagger.io/api/v3`.
+     * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+     *
+     * The following other environments, with dedicated builder methods, are available:
+     * - production: `https://accounts-service-production.up.railway.app`
      */
-    fun baseUrl(): String = baseUrl ?: PRODUCTION_URL
+    fun baseUrl(): String = baseUrl ?: STAGING_URL
 
     fun toBuilder() = Builder().from(this)
 
     companion object {
 
-        const val PRODUCTION_URL = "https://petstore3.swagger.io/api/v3"
+        const val STAGING_URL = "https://accounts-service-staging.up.railway.app"
+
+        const val PRODUCTION_URL = "https://accounts-service-production.up.railway.app"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
@@ -219,12 +224,18 @@ private constructor(
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the production environment: `https://petstore3.swagger.io/api/v3`.
+         * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+         *
+         * The following other environments, with dedicated builder methods, are available:
+         * - production: `https://accounts-service-production.up.railway.app`
          */
         fun baseUrl(baseUrl: String?) = apply { this.baseUrl = baseUrl }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
+
+        /** Sets [baseUrl] to `https://accounts-service-production.up.railway.app`. */
+        fun production() = baseUrl(PRODUCTION_URL)
 
         /**
          * Whether to call `validate` on every response before returning it.
@@ -359,10 +370,10 @@ private constructor(
          *
          * See this table for the available options:
          *
-         * |Setter   |System property|Environment variable|Required|Default value                          |
-         * |---------|---------------|--------------------|--------|---------------------------------------|
-         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                      |
-         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://petstore3.swagger.io/api/v3"`|
+         * |Setter   |System property|Environment variable|Required|Default value                                      |
+         * |---------|---------------|--------------------|--------|---------------------------------------------------|
+         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                  |
+         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://accounts-service-staging.up.railway.app"`|
          *
          * System properties take precedence over environment variables.
          */
@@ -372,6 +383,14 @@ private constructor(
             }
             (System.getProperty("rails.apiKey") ?: System.getenv("RAILS_API_KEY"))?.let {
                 apiKey(it)
+            }
+            System.getenv("RAILS_CUSTOM_HEADERS")?.let { customHeadersEnv ->
+                for (line in customHeadersEnv.split("\n")) {
+                    val colon = line.indexOf(':')
+                    if (colon >= 0) {
+                        putHeader(line.substring(0, colon).trim(), line.substring(colon + 1).trim())
+                    }
+                }
             }
         }
 
@@ -402,13 +421,15 @@ private constructor(
             headers.put("X-Stainless-Package-Version", getPackageVersion())
             headers.put("X-Stainless-Runtime", "JRE")
             headers.put("X-Stainless-Runtime-Version", getJavaVersion())
-            apiKey.let {
-                if (!it.isEmpty()) {
-                    headers.put("api_key", it)
-                }
-            }
+            headers.put("X-Stainless-Kotlin-Version", KotlinVersion.CURRENT.toString())
+            // We replace after all the default headers to allow end-users to overwrite them.
             headers.replaceAll(this.headers.build())
             queryParams.replaceAll(this.queryParams.build())
+            apiKey.let {
+                if (!it.isEmpty()) {
+                    headers.replace("X-API-Key", it)
+                }
+            }
 
             return ClientOptions(
                 httpClient,

@@ -1,20 +1,30 @@
 # Rails Java API Library
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.rails.api/rails-java)](https://central.sonatype.com/artifact/com.rails.api/rails-java/0.0.1)
-[![javadoc](https://javadoc.io/badge2/com.rails.api/rails-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.rails.api/rails-java/0.0.1)
+<!-- x-release-please-start-version -->
+
+[![Maven Central](https://img.shields.io/maven-central/v/com.rails.api/rails-java)](https://central.sonatype.com/artifact/com.rails.api/rails-java/0.1.0)
+[![javadoc](https://javadoc.io/badge2/com.rails.api/rails-java/0.1.0/javadoc.svg)](https://javadoc.io/doc/com.rails.api/rails-java/0.1.0)
+
+<!-- x-release-please-end -->
 
 The Rails Java SDK provides convenient access to the Rails REST API from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.rails.api/rails-java/0.0.1).
+<!-- x-release-please-start-version -->
+
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.rails.api/rails-java/0.1.0).
+
+<!-- x-release-please-end -->
 
 ## Installation
+
+<!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.rails.api:rails-java:0.0.1")
+implementation("com.rails.api:rails-java:0.1.0")
 ```
 
 ### Maven
@@ -23,9 +33,11 @@ implementation("com.rails.api:rails-java:0.0.1")
 <dependency>
   <groupId>com.rails.api</groupId>
   <artifactId>rails-java</artifactId>
-  <version>0.0.1</version>
+  <version>0.1.0</version>
 </dependency>
 ```
+
+<!-- x-release-please-end -->
 
 ## Requirements
 
@@ -36,18 +48,21 @@ This library requires Java 8 or later.
 ```java
 import com.rails.api.client.RailsClient;
 import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.users.UserCreateResponse;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-Pet params = Pet.builder()
-    .name("doggie")
-    .addPhotoUrl("string")
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
-Pet pet = client.pet().update(params);
+UserCreateResponse user = client.users().create(params);
 ```
 
 ## Client configuration
@@ -90,10 +105,10 @@ RailsClient client = RailsOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | System property | Environment variable | Required | Default value                           |
-| --------- | --------------- | -------------------- | -------- | --------------------------------------- |
-| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                       |
-| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://petstore3.swagger.io/api/v3"` |
+| Setter    | System property | Environment variable | Required | Default value                                       |
+| --------- | --------------- | -------------------- | -------- | --------------------------------------------------- |
+| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                   |
+| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://accounts-service-staging.up.railway.app"` |
 
 System properties take precedence over environment variables.
 
@@ -120,7 +135,7 @@ The `withOptions()` method does not affect the original client or service.
 
 To send a request to the Rails API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.pet().update(...)` should be called with an instance of `PetUpdateParams`, and it will return an instance of `Pet`.
+For example, `client.users().create(...)` should be called with an instance of `UserCreateParams`, and it will return an instance of `UserCreateResponse`.
 
 ## Immutability
 
@@ -137,19 +152,22 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.rails.api.client.RailsClient;
 import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.users.UserCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-Pet params = Pet.builder()
-    .name("doggie")
-    .addPhotoUrl("string")
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
-CompletableFuture<Pet> pet = client.async().pet().update(params);
+CompletableFuture<UserCreateResponse> user = client.async().users().create(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -157,19 +175,22 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.rails.api.client.RailsClientAsync;
 import com.rails.api.client.okhttp.RailsOkHttpClientAsync;
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.users.UserCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClientAsync client = RailsOkHttpClientAsync.fromEnv();
 
-Pet params = Pet.builder()
-    .name("doggie")
-    .addPhotoUrl("string")
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
-CompletableFuture<Pet> pet = client.pet().update(params);
+CompletableFuture<UserCreateResponse> user = client.users().create(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -183,25 +204,28 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.rails.api.core.http.Headers;
 import com.rails.api.core.http.HttpResponseFor;
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
+import com.rails.api.models.users.UserCreateResponse;
 
-Pet params = Pet.builder()
-    .name("doggie")
-    .addPhotoUrl("string")
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .email("jane@example.com")
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
-HttpResponseFor<Pet> pet = client.pet().withRawResponse().update(params);
+HttpResponseFor<UserCreateResponse> user = client.users().withRawResponse().create(params);
 
-int statusCode = pet.statusCode();
-Headers headers = pet.headers();
+int statusCode = user.statusCode();
+Headers headers = user.headers();
 ```
 
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.rails.api.models.pet.Pet;
+import com.rails.api.models.users.UserCreateResponse;
 
-Pet parsedPet = pet.parse();
+UserCreateResponse parsedUser = user.parse();
 ```
 
 ## Error handling
@@ -299,9 +323,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.rails.api.models.pet.Pet;
+import com.rails.api.models.users.UserCreateResponse;
 
-Pet pet = client.pet().update(
+UserCreateResponse user = client.users().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 );
 ```
@@ -339,6 +363,25 @@ RailsClient client = RailsOkHttpClient.builder()
     .build();
 ```
 
+### Connection pooling
+
+To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
+
+```java
+import com.rails.api.client.RailsClient;
+import com.rails.api.client.okhttp.RailsOkHttpClient;
+import java.time.Duration;
+
+RailsClient client = RailsOkHttpClient.builder()
+    .fromEnv()
+    // If `maxIdleConnections` is set, then `keepAliveDuration` must be set, and vice versa.
+    .maxIdleConnections(10)
+    .keepAliveDuration(Duration.ofMinutes(2))
+    .build();
+```
+
+If both options are unset, OkHttp's default connection pool settings are used.
+
 ### HTTPS
 
 > [!NOTE]
@@ -357,6 +400,20 @@ RailsClient client = RailsOkHttpClient.builder()
     .sslSocketFactory(yourSSLSocketFactory)
     .trustManager(yourTrustManager)
     .hostnameVerifier(yourHostnameVerifier)
+    .build();
+```
+
+### Environments
+
+The SDK sends requests to the staging by default. To send requests to a different environment, configure the client like so:
+
+```java
+import com.rails.api.client.RailsClient;
+import com.rails.api.client.okhttp.RailsOkHttpClient;
+
+RailsClient client = RailsOkHttpClient.builder()
+    .fromEnv()
+    .production()
     .build();
 ```
 
@@ -406,9 +463,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.rails.api.core.JsonValue;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
 
-PetUpdateParams params = PetUpdateParams.builder()
+UserCreateParams params = UserCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -420,14 +477,15 @@ These can be accessed on the built object later using the `_additionalHeaders()`
 To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](rails-java-core/src/main/kotlin/com/rails/api/core/Values.kt) object to its setter:
 
 ```java
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.core.JsonValue;
+import com.rails.api.models.users.UserCreateParams;
 
-PetUpdateParams params = PetUpdateParams.builder()
-    .pet(Pet.builder()
-        .name("doggie")
-        .addPhotoUrl("string")
-        .build())
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .email(JsonValue.from(42))
+    .firstName("Jane")
+    .lastName("Doe")
+    .password("your-secure-password")
     .build();
 ```
 
@@ -476,15 +534,14 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](rails-ja
 
 ```java
 import com.rails.api.core.JsonMissing;
-import com.rails.api.models.pet.Pet;
-import com.rails.api.models.pet.PetUpdateParams;
+import com.rails.api.models.users.UserCreateParams;
 
-PetUpdateParams params = PetUpdateParams.builder()
-    .pet(Pet.builder()
-        .name("doggie")
-        .addPhotoUrl("string")
-        .build())
-    .name(JsonMissing.of())
+UserCreateParams params = UserCreateParams.builder()
+    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+    .firstName("first_name")
+    .lastName("last_name")
+    .password("password")
+    .email(JsonMissing.of())
     .build();
 ```
 
@@ -496,7 +553,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.rails.api.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.pet().update(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.users().create(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -526,19 +583,19 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 import com.rails.api.core.JsonField;
 import java.util.Optional;
 
-JsonField<Object> field = client.pet().update(params)._field();
+JsonField<String> email = client.users().create(params)._email();
 
-if (field.isMissing()) {
+if (email.isMissing()) {
   // The property is absent from the JSON response
-} else if (field.isNull()) {
+} else if (email.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = field.asString();
+  Optional<String> jsonString = email.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = field.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = email.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
@@ -551,17 +608,17 @@ By default, the SDK will not throw an exception in this case. It will throw [`Ra
 If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.rails.api.models.pet.Pet;
+import com.rails.api.models.users.UserCreateResponse;
 
-Pet pet = client.pet().update(params).validate();
+UserCreateResponse user = client.users().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.rails.api.models.pet.Pet;
+import com.rails.api.models.users.UserCreateResponse;
 
-Pet pet = client.pet().update(
+UserCreateResponse user = client.users().create(
   params, RequestOptions.builder().responseValidation(true).build()
 );
 ```
@@ -616,4 +673,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/stainless-sdks/rails-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://www.github.com/railsinfra/rails-java/issues) with questions, bugs, or suggestions.

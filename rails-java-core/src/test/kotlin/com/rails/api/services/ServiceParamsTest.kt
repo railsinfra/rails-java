@@ -4,16 +4,18 @@ package com.rails.api.services
 
 import com.github.tomakehurst.wiremock.client.WireMock.anyUrl
 import com.github.tomakehurst.wiremock.client.WireMock.equalTo
+import com.github.tomakehurst.wiremock.client.WireMock.matchingJsonPath
 import com.github.tomakehurst.wiremock.client.WireMock.ok
-import com.github.tomakehurst.wiremock.client.WireMock.put
-import com.github.tomakehurst.wiremock.client.WireMock.putRequestedFor
+import com.github.tomakehurst.wiremock.client.WireMock.post
+import com.github.tomakehurst.wiremock.client.WireMock.postRequestedFor
 import com.github.tomakehurst.wiremock.client.WireMock.stubFor
 import com.github.tomakehurst.wiremock.client.WireMock.verify
 import com.github.tomakehurst.wiremock.junit5.WireMockRuntimeInfo
 import com.github.tomakehurst.wiremock.junit5.WireMockTest
 import com.rails.api.client.RailsClient
 import com.rails.api.client.okhttp.RailsOkHttpClient
-import com.rails.api.models.pet.Pet
+import com.rails.api.core.JsonValue
+import com.rails.api.models.users.UserCreateParams
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -34,27 +36,30 @@ internal class ServiceParamsTest {
                 .build()
     }
 
-    @Disabled("Prism tests are disabled")
+    @Disabled("Mock server tests are disabled")
     @Test
-    fun update() {
-        val petService = client.pet()
-        stubFor(put(anyUrl()).willReturn(ok("{}")))
+    fun create() {
+        val userService = client.users()
+        stubFor(post(anyUrl()).willReturn(ok("{}")))
 
-        petService.update(
-            Pet.builder()
-                .name("doggie")
-                .addPhotoUrl("string")
-                .id(10L)
-                .category(Pet.Category.builder().id(1L).name("Dogs").build())
-                .status(Pet.Status.AVAILABLE)
-                .addTag(Pet.Tag.builder().id(0L).name("name").build())
+        userService.create(
+            UserCreateParams.builder()
+                .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
+                .email("dev@stainless.com")
+                .firstName("first_name")
+                .lastName("last_name")
+                .password("password")
+                .putAdditionalHeader("Secret-Header", "42")
+                .putAdditionalQueryParam("secret_query_param", "42")
+                .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
                 .build()
         )
 
         verify(
-            putRequestedFor(anyUrl())
+            postRequestedFor(anyUrl())
                 .withHeader("Secret-Header", equalTo("42"))
                 .withQueryParam("secret_query_param", equalTo("42"))
+                .withRequestBody(matchingJsonPath("$.secretProperty", equalTo("42")))
         )
     }
 }
