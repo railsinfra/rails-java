@@ -5,12 +5,16 @@ package com.rails.api.errors
 import com.rails.api.core.JsonValue
 import com.rails.api.core.checkRequired
 import com.rails.api.core.http.Headers
+import com.rails.api.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class BadRequestException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    RailsServiceException("400: $body", cause) {
+    RailsServiceException(
+        "400: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
+        cause,
+    ) {
 
     override fun statusCode(): Int = 400
 
