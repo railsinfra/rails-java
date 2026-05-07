@@ -255,8 +255,6 @@ The SDK throws custom unchecked exception types:
 
 ## Logging
 
-The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
-
 Enable logging by setting the `RAILS_LOG` environment variable to `info`:
 
 ```sh
@@ -267,6 +265,19 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export RAILS_LOG=debug
+```
+
+Or configure the client manually using the `logLevel` method:
+
+```java
+import com.rails.api.client.RailsClient;
+import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.rails.api.core.LogLevel;
+
+RailsClient client = RailsOkHttpClient.builder()
+    .fromEnv()
+    .logLevel(LogLevel.INFO)
+    .build();
 ```
 
 ## ProGuard and R8
