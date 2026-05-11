@@ -224,17 +224,18 @@ class RailsOkHttpClient private constructor() {
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+         * Defaults to the staging environment:
+         * `https://rails-client-server-staging.up.railway.app`.
          *
          * The following other environments, with dedicated builder methods, are available:
-         * - production: `https://accounts-service-production.up.railway.app`
+         * - production: `https://rails-client-server-production.up.railway.app`
          */
         fun baseUrl(baseUrl: String?) = apply { clientOptions.baseUrl(baseUrl) }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
-        /** Sets [baseUrl] to `https://accounts-service-production.up.railway.app`. */
+        /** Sets [baseUrl] to `https://rails-client-server-production.up.railway.app`. */
         fun production() = apply { clientOptions.production() }
 
         /**

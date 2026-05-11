@@ -117,10 +117,10 @@ private constructor(
     /**
      * The base URL to use for every request.
      *
-     * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+     * Defaults to the staging environment: `https://rails-client-server-staging.up.railway.app`.
      *
      * The following other environments, with dedicated builder methods, are available:
-     * - production: `https://accounts-service-production.up.railway.app`
+     * - production: `https://rails-client-server-production.up.railway.app`
      */
     fun baseUrl(): String = baseUrl ?: STAGING_URL
 
@@ -128,9 +128,9 @@ private constructor(
 
     companion object {
 
-        const val STAGING_URL = "https://accounts-service-staging.up.railway.app"
+        const val STAGING_URL = "https://rails-client-server-staging.up.railway.app"
 
-        const val PRODUCTION_URL = "https://accounts-service-production.up.railway.app"
+        const val PRODUCTION_URL = "https://rails-client-server-production.up.railway.app"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
@@ -238,17 +238,18 @@ private constructor(
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
+         * Defaults to the staging environment:
+         * `https://rails-client-server-staging.up.railway.app`.
          *
          * The following other environments, with dedicated builder methods, are available:
-         * - production: `https://accounts-service-production.up.railway.app`
+         * - production: `https://rails-client-server-production.up.railway.app`
          */
         fun baseUrl(baseUrl: String?) = apply { this.baseUrl = baseUrl }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
-        /** Sets [baseUrl] to `https://accounts-service-production.up.railway.app`. */
+        /** Sets [baseUrl] to `https://rails-client-server-production.up.railway.app`. */
         fun production() = baseUrl(PRODUCTION_URL)
 
         /**
@@ -396,10 +397,10 @@ private constructor(
          *
          * See this table for the available options:
          *
-         * |Setter   |System property|Environment variable|Required|Default value                                      |
-         * |---------|---------------|--------------------|--------|---------------------------------------------------|
-         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                  |
-         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://accounts-service-staging.up.railway.app"`|
+         * |Setter   |System property|Environment variable|Required|Default value                                         |
+         * |---------|---------------|--------------------|--------|------------------------------------------------------|
+         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                     |
+         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://rails-client-server-staging.up.railway.app"`|
          *
          * System properties take precedence over environment variables.
          */

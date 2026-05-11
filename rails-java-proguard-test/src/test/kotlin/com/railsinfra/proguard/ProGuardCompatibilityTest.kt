@@ -50,6 +50,7 @@ internal class ProGuardCompatibilityTest {
         assertThat(client.users()).isNotNull()
         assertThat(client.accounts()).isNotNull()
         assertThat(client.transactions()).isNotNull()
+        assertThat(client.auditEvents()).isNotNull()
     }
 
     @Test

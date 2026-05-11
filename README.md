@@ -105,10 +105,10 @@ RailsClient client = RailsOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | System property | Environment variable | Required | Default value                                       |
-| --------- | --------------- | -------------------- | -------- | --------------------------------------------------- |
-| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                   |
-| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://accounts-service-staging.up.railway.app"` |
+| Setter    | System property | Environment variable | Required | Default value                                          |
+| --------- | --------------- | -------------------- | -------- | ------------------------------------------------------ |
+| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                      |
+| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://rails-client-server-staging.up.railway.app"` |
 
 System properties take precedence over environment variables.
 
