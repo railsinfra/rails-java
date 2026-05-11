@@ -6,6 +6,8 @@ import com.railsinfra.core.ClientOptions
 import com.railsinfra.core.getPackageVersion
 import com.railsinfra.services.blocking.AccountService
 import com.railsinfra.services.blocking.AccountServiceImpl
+import com.railsinfra.services.blocking.AuditEventService
+import com.railsinfra.services.blocking.AuditEventServiceImpl
 import com.railsinfra.services.blocking.TransactionService
 import com.railsinfra.services.blocking.TransactionServiceImpl
 import com.railsinfra.services.blocking.UserService
@@ -37,6 +39,10 @@ class RailsClientImpl(private val clientOptions: ClientOptions) : RailsClient {
         TransactionServiceImpl(clientOptionsWithUserAgent)
     }
 
+    private val auditEvents: AuditEventService by lazy {
+        AuditEventServiceImpl(clientOptionsWithUserAgent)
+    }
+
     override fun async(): RailsClientAsync = async
 
     override fun withRawResponse(): RailsClient.WithRawResponse = withRawResponse
@@ -52,6 +58,9 @@ class RailsClientImpl(private val clientOptions: ClientOptions) : RailsClient {
 
     /** Transactions */
     override fun transactions(): TransactionService = transactions
+
+    /** Audit events */
+    override fun auditEvents(): AuditEventService = auditEvents
 
     override fun close() = clientOptions.close()
 
@@ -70,6 +79,10 @@ class RailsClientImpl(private val clientOptions: ClientOptions) : RailsClient {
             TransactionServiceImpl.WithRawResponseImpl(clientOptions)
         }
 
+        private val auditEvents: AuditEventService.WithRawResponse by lazy {
+            AuditEventServiceImpl.WithRawResponseImpl(clientOptions)
+        }
+
         override fun withOptions(
             modifier: Consumer<ClientOptions.Builder>
         ): RailsClient.WithRawResponse =
@@ -85,5 +98,8 @@ class RailsClientImpl(private val clientOptions: ClientOptions) : RailsClient {
 
         /** Transactions */
         override fun transactions(): TransactionService.WithRawResponse = transactions
+
+        /** Audit events */
+        override fun auditEvents(): AuditEventService.WithRawResponse = auditEvents
     }
 }

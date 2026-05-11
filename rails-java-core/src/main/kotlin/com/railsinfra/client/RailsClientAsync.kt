@@ -4,6 +4,7 @@ package com.railsinfra.client
 
 import com.railsinfra.core.ClientOptions
 import com.railsinfra.services.async.AccountServiceAsync
+import com.railsinfra.services.async.AuditEventServiceAsync
 import com.railsinfra.services.async.TransactionServiceAsync
 import com.railsinfra.services.async.UserServiceAsync
 import java.util.function.Consumer
@@ -53,6 +54,9 @@ interface RailsClientAsync {
     /** Transactions */
     fun transactions(): TransactionServiceAsync
 
+    /** Audit events */
+    fun auditEvents(): AuditEventServiceAsync
+
     /**
      * Closes this client, relinquishing any underlying resources.
      *
@@ -84,5 +88,8 @@ interface RailsClientAsync {
 
         /** Transactions */
         fun transactions(): TransactionServiceAsync.WithRawResponse
+
+        /** Audit events */
+        fun auditEvents(): AuditEventServiceAsync.WithRawResponse
     }
 }
