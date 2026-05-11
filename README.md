@@ -2,8 +2,8 @@
 
 <!-- x-release-please-start-version -->
 
-[![Maven Central](https://img.shields.io/maven-central/v/com.rails.api/rails-java)](https://central.sonatype.com/artifact/com.rails.api/rails-java/0.0.1)
-[![javadoc](https://javadoc.io/badge2/com.rails.api/rails-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.rails.api/rails-java/0.0.1)
+[![Maven Central](https://img.shields.io/maven-central/v/com.railsinfra/rails-java)](https://central.sonatype.com/artifact/com.railsinfra/rails-java/0.0.1)
+[![javadoc](https://javadoc.io/badge2/com.railsinfra/rails-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.railsinfra/rails-java/0.0.1)
 
 <!-- x-release-please-end -->
 
@@ -13,7 +13,7 @@ It is generated with [Stainless](https://www.stainless.com/).
 
 <!-- x-release-please-start-version -->
 
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.rails.api/rails-java/0.0.1).
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.railsinfra/rails-java/0.0.1).
 
 <!-- x-release-please-end -->
 
@@ -24,14 +24,14 @@ Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.rails.api/rail
 ### Gradle
 
 ```kotlin
-implementation("com.rails.api:rails-java:0.0.1")
+implementation("com.railsinfra:rails-java:0.0.1")
 ```
 
 ### Maven
 
 ```xml
 <dependency>
-  <groupId>com.rails.api</groupId>
+  <groupId>com.railsinfra</groupId>
   <artifactId>rails-java</artifactId>
   <version>0.0.1</version>
 </dependency>
@@ -46,10 +46,10 @@ This library requires Java 8 or later.
 ## Usage
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.users.UserCreateResponse;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
@@ -70,8 +70,8 @@ UserCreateResponse user = client.users().create(params);
 Configure the client using system properties or environment variables:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
@@ -81,8 +81,8 @@ RailsClient client = RailsOkHttpClient.fromEnv();
 Or manually:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .apiKey("My API Key")
@@ -92,8 +92,8 @@ RailsClient client = RailsOkHttpClient.builder()
 Or using a combination of the two approaches:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
@@ -121,7 +121,7 @@ System properties take precedence over environment variables.
 To temporarily use a modified client configuration, while reusing the same connection and thread pools, call `withOptions()` on any client or service:
 
 ```java
-import com.rails.api.client.RailsClient;
+import com.railsinfra.client.RailsClient;
 
 RailsClient clientWithOptions = client.withOptions(optionsBuilder -> {
     optionsBuilder.baseUrl("https://example.com");
@@ -150,10 +150,10 @@ Because each class is immutable, builder modification will _never_ affect alread
 The default client is synchronous. To switch to asynchronous execution, call the `async()` method:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.users.UserCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
@@ -173,10 +173,10 @@ CompletableFuture<UserCreateResponse> user = client.async().users().create(param
 Or create an asynchronous client from the beginning:
 
 ```java
-import com.rails.api.client.RailsClientAsync;
-import com.rails.api.client.okhttp.RailsOkHttpClientAsync;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.client.RailsClientAsync;
+import com.railsinfra.client.okhttp.RailsOkHttpClientAsync;
+import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.users.UserCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
@@ -202,10 +202,10 @@ The SDK defines methods that deserialize responses into instances of Java classe
 To access this data, prefix any HTTP method call on a client or service with `withRawResponse()`:
 
 ```java
-import com.rails.api.core.http.Headers;
-import com.rails.api.core.http.HttpResponseFor;
-import com.rails.api.models.users.UserCreateParams;
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.core.http.Headers;
+import com.railsinfra.core.http.HttpResponseFor;
+import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.users.UserCreateResponse;
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
@@ -223,7 +223,7 @@ Headers headers = user.headers();
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.models.users.UserCreateResponse;
 
 UserCreateResponse parsedUser = user.parse();
 ```
@@ -232,26 +232,26 @@ UserCreateResponse parsedUser = user.parse();
 
 The SDK throws custom unchecked exception types:
 
-- [`RailsServiceException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
+- [`RailsServiceException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                                                                                                                |
-  | ------ | ------------------------------------------------------------------------------------------------------------------------ |
-  | 400    | [`BadRequestException`](rails-java-core/src/main/kotlin/com/rails/api/errors/BadRequestException.kt)                     |
-  | 401    | [`UnauthorizedException`](rails-java-core/src/main/kotlin/com/rails/api/errors/UnauthorizedException.kt)                 |
-  | 403    | [`PermissionDeniedException`](rails-java-core/src/main/kotlin/com/rails/api/errors/PermissionDeniedException.kt)         |
-  | 404    | [`NotFoundException`](rails-java-core/src/main/kotlin/com/rails/api/errors/NotFoundException.kt)                         |
-  | 422    | [`UnprocessableEntityException`](rails-java-core/src/main/kotlin/com/rails/api/errors/UnprocessableEntityException.kt)   |
-  | 429    | [`RateLimitException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RateLimitException.kt)                       |
-  | 5xx    | [`InternalServerException`](rails-java-core/src/main/kotlin/com/rails/api/errors/InternalServerException.kt)             |
-  | others | [`UnexpectedStatusCodeException`](rails-java-core/src/main/kotlin/com/rails/api/errors/UnexpectedStatusCodeException.kt) |
+  | Status | Exception                                                                                                                 |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+  | 400    | [`BadRequestException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/BadRequestException.kt)                     |
+  | 401    | [`UnauthorizedException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/UnauthorizedException.kt)                 |
+  | 403    | [`PermissionDeniedException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/PermissionDeniedException.kt)         |
+  | 404    | [`NotFoundException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/NotFoundException.kt)                         |
+  | 422    | [`UnprocessableEntityException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/UnprocessableEntityException.kt)   |
+  | 429    | [`RateLimitException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RateLimitException.kt)                       |
+  | 5xx    | [`InternalServerException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/InternalServerException.kt)             |
+  | others | [`UnexpectedStatusCodeException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/UnexpectedStatusCodeException.kt) |
 
-- [`RailsIoException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsIoException.kt): I/O networking errors.
+- [`RailsIoException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsIoException.kt): I/O networking errors.
 
-- [`RailsRetryableException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsRetryableException.kt): Generic error indicating a failure that could be retried by the client.
+- [`RailsRetryableException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsRetryableException.kt): Generic error indicating a failure that could be retried by the client.
 
-- [`RailsInvalidDataException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
+- [`RailsInvalidDataException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsInvalidDataException.kt): Failure to interpret successfully parsed data. For example, when accessing a property that's supposed to be required, but the API unexpectedly omitted it from the response.
 
-- [`RailsException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
+- [`RailsException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsException.kt): Base class for all exceptions. Most errors will result in one of the previously mentioned ones, but completely generic errors may be thrown using the base class.
 
 ## Logging
 
@@ -270,9 +270,9 @@ export RAILS_LOG=debug
 Or configure the client manually using the `logLevel` method:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.core.LogLevel;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.core.LogLevel;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
@@ -292,7 +292,7 @@ The SDK depends on [Jackson](https://github.com/FasterXML/jackson) for JSON seri
 
 The SDK throws an exception if it detects an incompatible Jackson version at runtime (e.g. if the default version was overridden in your Maven or Gradle config).
 
-If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClientAsync.kt).
+If the SDK threw an exception, but you're _certain_ the version is compatible, then disable the version check using the `checkJacksonVersionCompatibility` on [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClientAsync.kt).
 
 > [!CAUTION]
 > We make no guarantee that the SDK works correctly when the Jackson version check is disabled.
@@ -318,8 +318,8 @@ The API may also explicitly instruct the SDK to retry or not retry a request.
 To set a custom number of retries, configure the client using the `maxRetries` method:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
@@ -334,7 +334,7 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.models.users.UserCreateResponse;
 
 UserCreateResponse user = client.users().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
@@ -344,8 +344,8 @@ UserCreateResponse user = client.users().create(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 import java.time.Duration;
 
 RailsClient client = RailsOkHttpClient.builder()
@@ -359,8 +359,8 @@ RailsClient client = RailsOkHttpClient.builder()
 To route requests through a proxy, configure the client using the `proxy` method:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 
@@ -377,9 +377,9 @@ RailsClient client = RailsOkHttpClient.builder()
 If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
-import com.rails.api.core.http.ProxyAuthenticator;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.core.http.ProxyAuthenticator;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
@@ -394,8 +394,8 @@ RailsClient client = RailsOkHttpClient.builder()
 To customize the underlying OkHttp connection pool, configure the client using the `maxIdleConnections` and `keepAliveDuration` methods:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 import java.time.Duration;
 
 RailsClient client = RailsOkHttpClient.builder()
@@ -417,8 +417,8 @@ If both options are unset, OkHttp's default connection pool settings are used.
 To configure how HTTPS connections are secured, configure the client using the `sslSocketFactory`, `trustManager`, and `hostnameVerifier` methods:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
@@ -434,8 +434,8 @@ RailsClient client = RailsOkHttpClient.builder()
 The SDK sends requests to the staging by default. To send requests to a different environment, configure the client like so:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
@@ -450,10 +450,10 @@ The SDK consists of three artifacts:
 - `rails-java-core`
   - Contains core SDK logic
   - Does not depend on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`RailsClient`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClient.kt), [`RailsClientAsync`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientAsync.kt), [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientImpl.kt), and [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientAsyncImpl.kt), all of which can work with any HTTP client
+  - Exposes [`RailsClient`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClient.kt), [`RailsClientAsync`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientAsync.kt), [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientImpl.kt), and [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientAsyncImpl.kt), all of which can work with any HTTP client
 - `rails-java-client-okhttp`
   - Depends on [OkHttp](https://square.github.io/okhttp)
-  - Exposes [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClient.kt) and [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClientAsync.kt), which provide a way to construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientImpl.kt) and [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientAsyncImpl.kt), respectively, using OkHttp
+  - Exposes [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClient.kt) and [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClientAsync.kt), which provide a way to construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientImpl.kt) and [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientAsyncImpl.kt), respectively, using OkHttp
 - `rails-java`
   - Depends on and exposes the APIs of both `rails-java-core` and `rails-java-client-okhttp`
   - Does not have its own logic
@@ -468,16 +468,16 @@ This structure allows replacing the SDK's default HTTP client without pulling in
 To use a customized `OkHttpClient`:
 
 1. Replace your [`rails-java` dependency](#installation) with `rails-java-core`
-2. Copy `rails-java-client-okhttp`'s [`OkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/OkHttpClient.kt) class into your code and customize it
-3. Construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientImpl.kt) or [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientAsyncImpl.kt), similarly to [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClientAsync.kt), using your customized client
+2. Copy `rails-java-client-okhttp`'s [`OkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/OkHttpClient.kt) class into your code and customize it
+3. Construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientImpl.kt) or [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientAsyncImpl.kt), similarly to [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClientAsync.kt), using your customized client
 
 ### Completely custom HTTP client
 
 To use a completely custom HTTP client:
 
 1. Replace your [`rails-java` dependency](#installation) with `rails-java-core`
-2. Write a class that implements the [`HttpClient`](rails-java-core/src/main/kotlin/com/rails/api/core/http/HttpClient.kt) interface
-3. Construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientImpl.kt) or [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/rails/api/client/RailsClientAsyncImpl.kt), similarly to [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/rails/api/client/okhttp/RailsOkHttpClientAsync.kt), using your new client class
+2. Write a class that implements the [`HttpClient`](rails-java-core/src/main/kotlin/com/railsinfra/core/http/HttpClient.kt) interface
+3. Construct [`RailsClientImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientImpl.kt) or [`RailsClientAsyncImpl`](rails-java-core/src/main/kotlin/com/railsinfra/client/RailsClientAsyncImpl.kt), similarly to [`RailsOkHttpClient`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClient.kt) or [`RailsOkHttpClientAsync`](rails-java-client-okhttp/src/main/kotlin/com/railsinfra/client/okhttp/RailsOkHttpClientAsync.kt), using your new client class
 
 ## Undocumented API functionality
 
@@ -488,8 +488,8 @@ The SDK is typed for convenient usage of the documented API. However, it also su
 To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQueryParam`, or `putAdditionalBodyProperty` methods on any `Params` class:
 
 ```java
-import com.rails.api.core.JsonValue;
-import com.rails.api.models.users.UserCreateParams;
+import com.railsinfra.core.JsonValue;
+import com.railsinfra.models.users.UserCreateParams;
 
 UserCreateParams params = UserCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
@@ -500,11 +500,11 @@ UserCreateParams params = UserCreateParams.builder()
 
 These can be accessed on the built object later using the `_additionalHeaders()`, `_additionalQueryParams()`, and `_additionalBodyProperties()` methods.
 
-To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](rails-java-core/src/main/kotlin/com/rails/api/core/Values.kt) object to its setter:
+To set a documented parameter or property to an undocumented or not yet supported _value_, pass a [`JsonValue`](rails-java-core/src/main/kotlin/com/railsinfra/core/Values.kt) object to its setter:
 
 ```java
-import com.rails.api.core.JsonValue;
-import com.rails.api.models.users.UserCreateParams;
+import com.railsinfra.core.JsonValue;
+import com.railsinfra.models.users.UserCreateParams;
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
@@ -515,10 +515,10 @@ UserCreateParams params = UserCreateParams.builder()
     .build();
 ```
 
-The most straightforward way to create a [`JsonValue`](rails-java-core/src/main/kotlin/com/rails/api/core/Values.kt) is using its `from(...)` method:
+The most straightforward way to create a [`JsonValue`](rails-java-core/src/main/kotlin/com/railsinfra/core/Values.kt) is using its `from(...)` method:
 
 ```java
-import com.rails.api.core.JsonValue;
+import com.railsinfra.core.JsonValue;
 import java.util.List;
 import java.util.Map;
 
@@ -556,11 +556,11 @@ JsonValue complexValue = JsonValue.from(Map.of(
 
 Normally a `Builder` class's `build` method will throw [`IllegalStateException`](https://docs.oracle.com/javase/8/docs/api/java/lang/IllegalStateException.html) if any required parameter or property is unset.
 
-To forcibly omit a required parameter or property, pass [`JsonMissing`](rails-java-core/src/main/kotlin/com/rails/api/core/Values.kt):
+To forcibly omit a required parameter or property, pass [`JsonMissing`](rails-java-core/src/main/kotlin/com/railsinfra/core/Values.kt):
 
 ```java
-import com.rails.api.core.JsonMissing;
-import com.rails.api.models.users.UserCreateParams;
+import com.railsinfra.core.JsonMissing;
+import com.railsinfra.models.users.UserCreateParams;
 
 UserCreateParams params = UserCreateParams.builder()
     .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
@@ -576,7 +576,7 @@ UserCreateParams params = UserCreateParams.builder()
 To access undocumented response properties, call the `_additionalProperties()` method:
 
 ```java
-import com.rails.api.core.JsonValue;
+import com.railsinfra.core.JsonValue;
 import java.util.Map;
 
 Map<String, JsonValue> additionalProperties = client.users().create(params)._additionalProperties();
@@ -606,7 +606,7 @@ String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
 To access a property's raw JSON value, which may be undocumented, call its `_` prefixed method:
 
 ```java
-import com.rails.api.core.JsonField;
+import com.railsinfra.core.JsonField;
 import java.util.Optional;
 
 JsonField<String> email = client.users().create(params)._email();
@@ -629,14 +629,14 @@ if (email.isMissing()) {
 
 In rare cases, the API may return a response that doesn't match the expected type. For example, the SDK may expect a property to contain a `String`, but the API could return something else.
 
-By default, the SDK will not throw an exception in this case. It will throw [`RailsInvalidDataException`](rails-java-core/src/main/kotlin/com/rails/api/errors/RailsInvalidDataException.kt) only if you directly access the property.
+By default, the SDK will not throw an exception in this case. It will throw [`RailsInvalidDataException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsInvalidDataException.kt) only if you directly access the property.
 
 Validating the response is _not_ forwards compatible with new types from the API for existing fields.
 
 If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.models.users.UserCreateResponse;
 
 UserCreateResponse user = client.users().create(params).validate();
 ```
@@ -644,7 +644,7 @@ UserCreateResponse user = client.users().create(params).validate();
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.rails.api.models.users.UserCreateResponse;
+import com.railsinfra.models.users.UserCreateResponse;
 
 UserCreateResponse user = client.users().create(
   params, RequestOptions.builder().responseValidation(true).build()
@@ -654,8 +654,8 @@ UserCreateResponse user = client.users().create(
 Or configure the default for all method calls at the client level:
 
 ```java
-import com.rails.api.client.RailsClient;
-import com.rails.api.client.okhttp.RailsOkHttpClient;
+import com.railsinfra.client.RailsClient;
+import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()

@@ -1,0 +1,5 @@
+package com.railsinfra.errors
+
+open class RailsException
+@JvmOverloads
+constructor(message: String? = null, cause: Throwable? = null) : RuntimeException(message, cause)
