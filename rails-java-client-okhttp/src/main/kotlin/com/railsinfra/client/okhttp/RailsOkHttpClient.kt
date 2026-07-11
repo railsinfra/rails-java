@@ -228,14 +228,14 @@ class RailsOkHttpClient private constructor() {
          * `https://rails-client-server-staging.up.railway.app`.
          *
          * The following other environments, with dedicated builder methods, are available:
-         * - production: `https://rails-client-server-production.up.railway.app`
+         * - production: `https://www.api.railsinfra.com`
          */
         fun baseUrl(baseUrl: String?) = apply { clientOptions.baseUrl(baseUrl) }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
-        /** Sets [baseUrl] to `https://rails-client-server-production.up.railway.app`. */
+        /** Sets [baseUrl] to `https://www.api.railsinfra.com`. */
         fun production() = apply { clientOptions.production() }
 
         /**

@@ -120,7 +120,7 @@ private constructor(
      * Defaults to the staging environment: `https://rails-client-server-staging.up.railway.app`.
      *
      * The following other environments, with dedicated builder methods, are available:
-     * - production: `https://rails-client-server-production.up.railway.app`
+     * - production: `https://www.api.railsinfra.com`
      */
     fun baseUrl(): String = baseUrl ?: STAGING_URL
 
@@ -130,7 +130,7 @@ private constructor(
 
         const val STAGING_URL = "https://rails-client-server-staging.up.railway.app"
 
-        const val PRODUCTION_URL = "https://rails-client-server-production.up.railway.app"
+        const val PRODUCTION_URL = "https://www.api.railsinfra.com"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
@@ -242,14 +242,14 @@ private constructor(
          * `https://rails-client-server-staging.up.railway.app`.
          *
          * The following other environments, with dedicated builder methods, are available:
-         * - production: `https://rails-client-server-production.up.railway.app`
+         * - production: `https://www.api.railsinfra.com`
          */
         fun baseUrl(baseUrl: String?) = apply { this.baseUrl = baseUrl }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
-        /** Sets [baseUrl] to `https://rails-client-server-production.up.railway.app`. */
+        /** Sets [baseUrl] to `https://www.api.railsinfra.com`. */
         fun production() = baseUrl(PRODUCTION_URL)
 
         /**
