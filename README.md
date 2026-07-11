@@ -105,10 +105,10 @@ RailsClient client = RailsOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | System property | Environment variable | Required | Default value                                          |
-| --------- | --------------- | -------------------- | -------- | ------------------------------------------------------ |
-| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                      |
-| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://rails-client-server-staging.up.railway.app"` |
+| Setter    | System property | Environment variable | Required | Default value                      |
+| --------- | --------------- | -------------------- | -------- | ---------------------------------- |
+| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                  |
+| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://www.api.railsinfra.com"` |
 
 System properties take precedence over environment variables.
 
@@ -431,7 +431,7 @@ RailsClient client = RailsOkHttpClient.builder()
 
 ### Environments
 
-The SDK sends requests to the staging by default. To send requests to a different environment, configure the client like so:
+The SDK sends requests to the production by default. To send requests to a different environment, configure the client like so:
 
 ```java
 import com.railsinfra.client.RailsClient;
@@ -439,7 +439,7 @@ import com.railsinfra.client.okhttp.RailsOkHttpClient;
 
 RailsClient client = RailsOkHttpClient.builder()
     .fromEnv()
-    .production()
+    .staging()
     .build();
 ```
 
