@@ -5,6 +5,7 @@ package com.railsinfra.services.async
 import com.railsinfra.client.okhttp.RailsOkHttpClientAsync
 import com.railsinfra.models.transactions.TransactionListByAccountParams
 import com.railsinfra.models.transactions.TransactionListParams
+import com.railsinfra.models.transactions.TransactionRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -17,7 +18,12 @@ internal class TransactionServiceAsyncTest {
         val transactionServiceAsync = client.transactions()
 
         val transactionFuture =
-            transactionServiceAsync.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            transactionServiceAsync.retrieve(
+                TransactionRetrieveParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(TransactionRetrieveParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         val transaction = transactionFuture.get()
         transaction.validate()
@@ -35,6 +41,7 @@ internal class TransactionServiceAsyncTest {
                     .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .page(1L)
                     .perPage(1L)
+                    .xEnvironment(TransactionListParams.XEnvironment.SANDBOX)
                     .build()
             )
 
@@ -53,6 +60,7 @@ internal class TransactionServiceAsyncTest {
                 TransactionListByAccountParams.builder()
                     .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .limit(0L)
+                    .xEnvironment(TransactionListByAccountParams.XEnvironment.SANDBOX)
                     .build()
             )
 

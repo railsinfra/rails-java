@@ -2,6 +2,7 @@
 
 package com.railsinfra.models.accounts
 
+import com.railsinfra.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -10,6 +11,7 @@ internal class AccountCreateParamsTest {
     @Test
     fun create() {
         AccountCreateParams.builder()
+            .xEnvironment(AccountCreateParams.XEnvironment.SANDBOX)
             .accountType(AccountCreateParams.AccountType.CHECKING)
             .currency("SEW")
             .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -19,9 +21,41 @@ internal class AccountCreateParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            AccountCreateParams.builder()
+                .xEnvironment(AccountCreateParams.XEnvironment.SANDBOX)
+                .accountType(AccountCreateParams.AccountType.CHECKING)
+                .currency("SEW")
+                .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .environment("environment")
+                .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().put("X-Environment", "sandbox").build())
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            AccountCreateParams.builder()
+                .accountType(AccountCreateParams.AccountType.CHECKING)
+                .currency("SEW")
+                .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             AccountCreateParams.builder()
+                .xEnvironment(AccountCreateParams.XEnvironment.SANDBOX)
                 .accountType(AccountCreateParams.AccountType.CHECKING)
                 .currency("SEW")
                 .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")

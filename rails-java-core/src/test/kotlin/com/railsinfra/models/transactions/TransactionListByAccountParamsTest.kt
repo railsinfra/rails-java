@@ -2,6 +2,7 @@
 
 package com.railsinfra.models.transactions
 
+import com.railsinfra.core.http.Headers
 import com.railsinfra.core.http.QueryParams
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
@@ -13,6 +14,7 @@ internal class TransactionListByAccountParamsTest {
         TransactionListByAccountParams.builder()
             .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
             .limit(0L)
+            .xEnvironment(TransactionListByAccountParams.XEnvironment.SANDBOX)
             .build()
     }
 
@@ -29,11 +31,38 @@ internal class TransactionListByAccountParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            TransactionListByAccountParams.builder()
+                .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .limit(0L)
+                .xEnvironment(TransactionListByAccountParams.XEnvironment.SANDBOX)
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().put("X-Environment", "sandbox").build())
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            TransactionListByAccountParams.builder()
+                .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun queryParams() {
         val params =
             TransactionListByAccountParams.builder()
                 .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                 .limit(0L)
+                .xEnvironment(TransactionListByAccountParams.XEnvironment.SANDBOX)
                 .build()
 
         val queryParams = params._queryParams()

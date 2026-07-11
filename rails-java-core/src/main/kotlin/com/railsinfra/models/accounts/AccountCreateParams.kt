@@ -24,10 +24,13 @@ import kotlin.jvm.optionals.getOrNull
 /** Create account */
 class AccountCreateParams
 private constructor(
+    private val xEnvironment: XEnvironment?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
+
+    fun xEnvironment(): Optional<XEnvironment> = Optional.ofNullable(xEnvironment)
 
     /**
      * @throws RailsInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -124,16 +127,24 @@ private constructor(
     /** A builder for [AccountCreateParams]. */
     class Builder internal constructor() {
 
+        private var xEnvironment: XEnvironment? = null
         private var body: Body.Builder = Body.builder()
         private var additionalHeaders: Headers.Builder = Headers.builder()
         private var additionalQueryParams: QueryParams.Builder = QueryParams.builder()
 
         @JvmSynthetic
         internal fun from(accountCreateParams: AccountCreateParams) = apply {
+            xEnvironment = accountCreateParams.xEnvironment
             body = accountCreateParams.body.toBuilder()
             additionalHeaders = accountCreateParams.additionalHeaders.toBuilder()
             additionalQueryParams = accountCreateParams.additionalQueryParams.toBuilder()
         }
+
+        fun xEnvironment(xEnvironment: XEnvironment?) = apply { this.xEnvironment = xEnvironment }
+
+        /** Alias for calling [Builder.xEnvironment] with `xEnvironment.orElse(null)`. */
+        fun xEnvironment(xEnvironment: Optional<XEnvironment>) =
+            xEnvironment(xEnvironment.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -347,6 +358,7 @@ private constructor(
          */
         fun build(): AccountCreateParams =
             AccountCreateParams(
+                xEnvironment,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -355,7 +367,13 @@ private constructor(
 
     fun _body(): Body = body
 
-    override fun _headers(): Headers = additionalHeaders
+    override fun _headers(): Headers =
+        Headers.builder()
+            .apply {
+                xEnvironment?.let { put("X-Environment", it.toString()) }
+                putAll(additionalHeaders)
+            }
+            .build()
 
     override fun _queryParams(): QueryParams = additionalQueryParams
 
@@ -835,19 +853,157 @@ private constructor(
         override fun toString() = value.toString()
     }
 
+    class XEnvironment @JsonCreator private constructor(private val value: JsonField<String>) :
+        Enum {
+
+        /**
+         * Returns this class instance's raw value.
+         *
+         * This is usually only useful if this instance was deserialized from data that doesn't
+         * match any known member, and you want to know that value. For example, if the SDK is on an
+         * older version than the API, then the API may respond with new members that the SDK is
+         * unaware of.
+         */
+        @com.fasterxml.jackson.annotation.JsonValue fun _value(): JsonField<String> = value
+
+        companion object {
+
+            @JvmField val SANDBOX = of("sandbox")
+
+            @JvmField val PRODUCTION = of("production")
+
+            @JvmStatic fun of(value: String) = XEnvironment(JsonField.of(value))
+        }
+
+        /** An enum containing [XEnvironment]'s known values. */
+        enum class Known {
+            SANDBOX,
+            PRODUCTION,
+        }
+
+        /**
+         * An enum containing [XEnvironment]'s known values, as well as an [_UNKNOWN] member.
+         *
+         * An instance of [XEnvironment] can contain an unknown value in a couple of cases:
+         * - It was deserialized from data that doesn't match any known member. For example, if the
+         *   SDK is on an older version than the API, then the API may respond with new members that
+         *   the SDK is unaware of.
+         * - It was constructed with an arbitrary value using the [of] method.
+         */
+        enum class Value {
+            SANDBOX,
+            PRODUCTION,
+            /**
+             * An enum member indicating that [XEnvironment] was instantiated with an unknown value.
+             */
+            _UNKNOWN,
+        }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value, or [Value._UNKNOWN]
+         * if the class was instantiated with an unknown value.
+         *
+         * Use the [known] method instead if you're certain the value is always known or if you want
+         * to throw for the unknown case.
+         */
+        fun value(): Value =
+            when (this) {
+                SANDBOX -> Value.SANDBOX
+                PRODUCTION -> Value.PRODUCTION
+                else -> Value._UNKNOWN
+            }
+
+        /**
+         * Returns an enum member corresponding to this class instance's value.
+         *
+         * Use the [value] method instead if you're uncertain the value is always known and don't
+         * want to throw for the unknown case.
+         *
+         * @throws RailsInvalidDataException if this class instance's value is a not a known member.
+         */
+        fun known(): Known =
+            when (this) {
+                SANDBOX -> Known.SANDBOX
+                PRODUCTION -> Known.PRODUCTION
+                else -> throw RailsInvalidDataException("Unknown XEnvironment: $value")
+            }
+
+        /**
+         * Returns this class instance's primitive wire representation.
+         *
+         * This differs from the [toString] method because that method is primarily for debugging
+         * and generally doesn't throw.
+         *
+         * @throws RailsInvalidDataException if this class instance's value does not have the
+         *   expected primitive type.
+         */
+        fun asString(): String =
+            _value().asString().orElseThrow { RailsInvalidDataException("Value is not a String") }
+
+        private var validated: Boolean = false
+
+        /**
+         * Validates that the types of all values in this object match their expected types
+         * recursively.
+         *
+         * This method is _not_ forwards compatible with new types from the API for existing fields.
+         *
+         * @throws RailsInvalidDataException if any value type in this object doesn't match its
+         *   expected type.
+         */
+        fun validate(): XEnvironment = apply {
+            if (validated) {
+                return@apply
+            }
+
+            known()
+            validated = true
+        }
+
+        fun isValid(): Boolean =
+            try {
+                validate()
+                true
+            } catch (e: RailsInvalidDataException) {
+                false
+            }
+
+        /**
+         * Returns a score indicating how many valid values are contained in this object
+         * recursively.
+         *
+         * Used for best match union deserialization.
+         */
+        @JvmSynthetic internal fun validity(): Int = if (value() == Value._UNKNOWN) 0 else 1
+
+        override fun equals(other: Any?): Boolean {
+            if (this === other) {
+                return true
+            }
+
+            return other is XEnvironment && value == other.value
+        }
+
+        override fun hashCode() = value.hashCode()
+
+        override fun toString() = value.toString()
+    }
+
     override fun equals(other: Any?): Boolean {
         if (this === other) {
             return true
         }
 
         return other is AccountCreateParams &&
+            xEnvironment == other.xEnvironment &&
             body == other.body &&
             additionalHeaders == other.additionalHeaders &&
             additionalQueryParams == other.additionalQueryParams
     }
 
-    override fun hashCode(): Int = Objects.hash(body, additionalHeaders, additionalQueryParams)
+    override fun hashCode(): Int =
+        Objects.hash(xEnvironment, body, additionalHeaders, additionalQueryParams)
 
     override fun toString() =
-        "AccountCreateParams{body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
+        "AccountCreateParams{xEnvironment=$xEnvironment, body=$body, additionalHeaders=$additionalHeaders, additionalQueryParams=$additionalQueryParams}"
 }

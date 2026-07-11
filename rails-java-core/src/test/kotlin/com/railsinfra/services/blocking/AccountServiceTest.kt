@@ -3,9 +3,11 @@
 package com.railsinfra.services.blocking
 
 import com.railsinfra.client.okhttp.RailsOkHttpClient
+import com.railsinfra.models.accounts.AccountCloseParams
 import com.railsinfra.models.accounts.AccountCreateParams
 import com.railsinfra.models.accounts.AccountDepositParams
 import com.railsinfra.models.accounts.AccountListParams
+import com.railsinfra.models.accounts.AccountRetrieveParams
 import com.railsinfra.models.accounts.AccountTransferParams
 import com.railsinfra.models.accounts.AccountUpdateStatusParams
 import com.railsinfra.models.accounts.AccountWithdrawParams
@@ -23,6 +25,7 @@ internal class AccountServiceTest {
         val account =
             accountService.create(
                 AccountCreateParams.builder()
+                    .xEnvironment(AccountCreateParams.XEnvironment.SANDBOX)
                     .accountType(AccountCreateParams.AccountType.CHECKING)
                     .currency("SEW")
                     .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -40,7 +43,13 @@ internal class AccountServiceTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
-        val account = accountService.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val account =
+            accountService.retrieve(
+                AccountRetrieveParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountRetrieveParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         account.validate()
     }
@@ -53,7 +62,10 @@ internal class AccountServiceTest {
 
         val accounts =
             accountService.list(
-                AccountListParams.builder().userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                AccountListParams.builder()
+                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountListParams.XEnvironment.SANDBOX)
+                    .build()
             )
 
         accounts.forEach { it.validate() }
@@ -65,7 +77,13 @@ internal class AccountServiceTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val accountService = client.accounts()
 
-        val account = accountService.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val account =
+            accountService.close(
+                AccountCloseParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountCloseParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         account.validate()
     }
@@ -80,6 +98,7 @@ internal class AccountServiceTest {
             accountService.deposit(
                 AccountDepositParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountDepositParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .description("description")
                     .build()
@@ -98,6 +117,7 @@ internal class AccountServiceTest {
             accountService.transfer(
                 AccountTransferParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountTransferParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .toAccountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .description("description")
@@ -117,6 +137,7 @@ internal class AccountServiceTest {
             accountService.updateStatus(
                 AccountUpdateStatusParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountUpdateStatusParams.XEnvironment.SANDBOX)
                     .status(AccountUpdateStatusParams.Status.ACTIVE)
                     .build()
             )
@@ -134,6 +155,7 @@ internal class AccountServiceTest {
             accountService.withdraw(
                 AccountWithdrawParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountWithdrawParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .description("description")
                     .build()

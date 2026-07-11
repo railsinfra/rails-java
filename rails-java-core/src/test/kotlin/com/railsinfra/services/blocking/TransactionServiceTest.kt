@@ -5,6 +5,7 @@ package com.railsinfra.services.blocking
 import com.railsinfra.client.okhttp.RailsOkHttpClient
 import com.railsinfra.models.transactions.TransactionListByAccountParams
 import com.railsinfra.models.transactions.TransactionListParams
+import com.railsinfra.models.transactions.TransactionRetrieveParams
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
@@ -16,7 +17,13 @@ internal class TransactionServiceTest {
         val client = RailsOkHttpClient.builder().apiKey("My API Key").build()
         val transactionService = client.transactions()
 
-        val transaction = transactionService.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val transaction =
+            transactionService.retrieve(
+                TransactionRetrieveParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(TransactionRetrieveParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         transaction.validate()
     }
@@ -33,6 +40,7 @@ internal class TransactionServiceTest {
                     .organizationId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .page(1L)
                     .perPage(1L)
+                    .xEnvironment(TransactionListParams.XEnvironment.SANDBOX)
                     .build()
             )
 
@@ -50,6 +58,7 @@ internal class TransactionServiceTest {
                 TransactionListByAccountParams.builder()
                     .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .limit(0L)
+                    .xEnvironment(TransactionListByAccountParams.XEnvironment.SANDBOX)
                     .build()
             )
 

@@ -2,6 +2,7 @@
 
 package com.railsinfra.models.accounts
 
+import com.railsinfra.core.http.Headers
 import org.assertj.core.api.Assertions.assertThat
 import org.junit.jupiter.api.Test
 
@@ -11,6 +12,7 @@ internal class AccountUpdateStatusParamsTest {
     fun create() {
         AccountUpdateStatusParams.builder()
             .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+            .xEnvironment(AccountUpdateStatusParams.XEnvironment.SANDBOX)
             .status(AccountUpdateStatusParams.Status.ACTIVE)
             .build()
     }
@@ -26,10 +28,35 @@ internal class AccountUpdateStatusParamsTest {
     }
 
     @Test
+    fun headers() {
+        val params =
+            AccountUpdateStatusParams.builder()
+                .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .xEnvironment(AccountUpdateStatusParams.XEnvironment.SANDBOX)
+                .status(AccountUpdateStatusParams.Status.ACTIVE)
+                .build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().put("X-Environment", "sandbox").build())
+    }
+
+    @Test
+    fun headersWithoutOptionalFields() {
+        val params =
+            AccountUpdateStatusParams.builder().id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+
+        val headers = params._headers()
+
+        assertThat(headers).isEqualTo(Headers.builder().build())
+    }
+
+    @Test
     fun body() {
         val params =
             AccountUpdateStatusParams.builder()
                 .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                .xEnvironment(AccountUpdateStatusParams.XEnvironment.SANDBOX)
                 .status(AccountUpdateStatusParams.Status.ACTIVE)
                 .build()
 

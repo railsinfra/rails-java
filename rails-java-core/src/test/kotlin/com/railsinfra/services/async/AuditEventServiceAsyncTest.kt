@@ -28,6 +28,7 @@ internal class AuditEventServiceAsyncTest {
                     .targetId("target_id")
                     .targetType("target_type")
                     .to(OffsetDateTime.parse("2019-12-27T18:11:19.117Z"))
+                    .xEnvironment(AuditEventListParams.XEnvironment.SANDBOX)
                     .build()
             )
 

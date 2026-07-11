@@ -3,9 +3,11 @@
 package com.railsinfra.services.async
 
 import com.railsinfra.client.okhttp.RailsOkHttpClientAsync
+import com.railsinfra.models.accounts.AccountCloseParams
 import com.railsinfra.models.accounts.AccountCreateParams
 import com.railsinfra.models.accounts.AccountDepositParams
 import com.railsinfra.models.accounts.AccountListParams
+import com.railsinfra.models.accounts.AccountRetrieveParams
 import com.railsinfra.models.accounts.AccountTransferParams
 import com.railsinfra.models.accounts.AccountUpdateStatusParams
 import com.railsinfra.models.accounts.AccountWithdrawParams
@@ -23,6 +25,7 @@ internal class AccountServiceAsyncTest {
         val accountFuture =
             accountServiceAsync.create(
                 AccountCreateParams.builder()
+                    .xEnvironment(AccountCreateParams.XEnvironment.SANDBOX)
                     .accountType(AccountCreateParams.AccountType.CHECKING)
                     .currency("SEW")
                     .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -41,7 +44,13 @@ internal class AccountServiceAsyncTest {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val accountServiceAsync = client.accounts()
 
-        val accountFuture = accountServiceAsync.retrieve("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val accountFuture =
+            accountServiceAsync.retrieve(
+                AccountRetrieveParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountRetrieveParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         val account = accountFuture.get()
         account.validate()
@@ -55,7 +64,10 @@ internal class AccountServiceAsyncTest {
 
         val accountsFuture =
             accountServiceAsync.list(
-                AccountListParams.builder().userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e").build()
+                AccountListParams.builder()
+                    .userId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountListParams.XEnvironment.SANDBOX)
+                    .build()
             )
 
         val accounts = accountsFuture.get()
@@ -68,7 +80,13 @@ internal class AccountServiceAsyncTest {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val accountServiceAsync = client.accounts()
 
-        val accountFuture = accountServiceAsync.close("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+        val accountFuture =
+            accountServiceAsync.close(
+                AccountCloseParams.builder()
+                    .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountCloseParams.XEnvironment.SANDBOX)
+                    .build()
+            )
 
         val account = accountFuture.get()
         account.validate()
@@ -84,6 +102,7 @@ internal class AccountServiceAsyncTest {
             accountServiceAsync.deposit(
                 AccountDepositParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountDepositParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .description("description")
                     .build()
@@ -103,6 +122,7 @@ internal class AccountServiceAsyncTest {
             accountServiceAsync.transfer(
                 AccountTransferParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountTransferParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .toAccountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
                     .description("description")
@@ -123,6 +143,7 @@ internal class AccountServiceAsyncTest {
             accountServiceAsync.updateStatus(
                 AccountUpdateStatusParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountUpdateStatusParams.XEnvironment.SANDBOX)
                     .status(AccountUpdateStatusParams.Status.ACTIVE)
                     .build()
             )
@@ -141,6 +162,7 @@ internal class AccountServiceAsyncTest {
             accountServiceAsync.withdraw(
                 AccountWithdrawParams.builder()
                     .id("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
+                    .xEnvironment(AccountWithdrawParams.XEnvironment.SANDBOX)
                     .amount("amount")
                     .description("description")
                     .build()

@@ -18,17 +18,19 @@ import com.railsinfra.core.http.QueryParams
 import com.railsinfra.errors.RailsInvalidDataException
 import java.util.Collections
 import java.util.Objects
+import java.util.Optional
+import kotlin.jvm.optionals.getOrNull
 
 /** Create user */
 class UserCreateParams
 private constructor(
-    private val xEnvironment: XEnvironment,
+    private val xEnvironment: XEnvironment?,
     private val body: Body,
     private val additionalHeaders: Headers,
     private val additionalQueryParams: QueryParams,
 ) : Params {
 
-    fun xEnvironment(): XEnvironment = xEnvironment
+    fun xEnvironment(): Optional<XEnvironment> = Optional.ofNullable(xEnvironment)
 
     /**
      * @throws RailsInvalidDataException if the JSON field has an unexpected type or is unexpectedly
@@ -99,7 +101,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .xEnvironment()
          * .email()
          * .firstName()
          * .lastName()
@@ -125,7 +126,11 @@ private constructor(
             additionalQueryParams = userCreateParams.additionalQueryParams.toBuilder()
         }
 
-        fun xEnvironment(xEnvironment: XEnvironment) = apply { this.xEnvironment = xEnvironment }
+        fun xEnvironment(xEnvironment: XEnvironment?) = apply { this.xEnvironment = xEnvironment }
+
+        /** Alias for calling [Builder.xEnvironment] with `xEnvironment.orElse(null)`. */
+        fun xEnvironment(xEnvironment: Optional<XEnvironment>) =
+            xEnvironment(xEnvironment.getOrNull())
 
         /**
          * Sets the entire request body.
@@ -304,7 +309,6 @@ private constructor(
          *
          * The following fields are required:
          * ```java
-         * .xEnvironment()
          * .email()
          * .firstName()
          * .lastName()
@@ -315,7 +319,7 @@ private constructor(
          */
         fun build(): UserCreateParams =
             UserCreateParams(
-                checkRequired("xEnvironment", xEnvironment),
+                xEnvironment,
                 body.build(),
                 additionalHeaders.build(),
                 additionalQueryParams.build(),
@@ -327,7 +331,7 @@ private constructor(
     override fun _headers(): Headers =
         Headers.builder()
             .apply {
-                put("X-Environment", xEnvironment.toString())
+                xEnvironment?.let { put("X-Environment", it.toString()) }
                 putAll(additionalHeaders)
             }
             .build()
