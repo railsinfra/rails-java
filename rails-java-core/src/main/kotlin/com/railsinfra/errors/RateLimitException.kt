@@ -5,16 +5,12 @@ package com.railsinfra.errors
 import com.railsinfra.core.JsonValue
 import com.railsinfra.core.checkRequired
 import com.railsinfra.core.http.Headers
-import com.railsinfra.core.jsonMapper
 import java.util.Optional
 import kotlin.jvm.optionals.getOrNull
 
 class RateLimitException
 private constructor(private val headers: Headers, private val body: JsonValue, cause: Throwable?) :
-    RailsServiceException(
-        "429: ${if (body.isMissing()) "Unknown" else jsonMapper().writeValueAsString(body)}",
-        cause,
-    ) {
+    RailsServiceException("429: $body", cause) {
 
     override fun statusCode(): Int = 429
 

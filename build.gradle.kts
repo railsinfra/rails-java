@@ -1,4 +1,5 @@
 plugins {
+    id("io.github.gradle-nexus.publish-plugin") version "1.1.0"
     id("org.jetbrains.dokka") version "2.0.0"
 }
 
@@ -8,7 +9,7 @@ repositories {
 
 allprojects {
     group = "com.railsinfra"
-    version = "0.1.0" // x-release-please-version
+    version = "0.0.1"
 }
 
 subprojects {
@@ -21,6 +22,7 @@ subprojects {
         group = "Verification"
         description = "Verifies all source files are formatted."
     }
+    apply(plugin = "org.jetbrains.dokka")
 }
 
 subprojects {
@@ -32,4 +34,26 @@ tasks.named("dokkaJavadocCollector").configure {
     subprojects.flatMap { it.tasks }
         .filter { it.project.name != "rails-java" && it.name == "dokkaJavadocJar" }
         .forEach { mustRunAfter(it) }
+}
+
+// OSSRH at oss.sonatype.org / s01 is retired; use Central Portal compatibility staging API + Portal token.
+// See https://central.sonatype.org/publish/publish-portal-ossrh-staging-api/
+nexusPublishing {
+    packageGroup.set("com.railsinfra")
+    repositories {
+        sonatype {
+            nexusUrl.set(uri("https://ossrh-staging-api.central.sonatype.com/service/local/"))
+            snapshotRepositoryUrl.set(uri("https://central.sonatype.com/repository/maven-snapshots/"))
+
+            username.set(System.getenv("SONATYPE_USERNAME"))
+            password.set(System.getenv("SONATYPE_PASSWORD"))
+
+            // If publish fails with "Failed to find staging profile for package group", set this to the
+            // profile id from: ./gradlew retrieveSonatypeStagingProfile --no-configuration-cache
+            // (requires SONATYPE_* env) or from Maven Central → Publishing in the portal UI.
+            System.getenv("SONATYPE_STAGING_PROFILE_ID")?.ifBlank { null }?.let { id ->
+                stagingProfileId.set(id)
+            }
+        }
+    }
 }

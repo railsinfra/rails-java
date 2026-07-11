@@ -48,7 +48,7 @@ internal class TransactionServiceAsyncTest {
         val client = RailsOkHttpClientAsync.builder().apiKey("My API Key").build()
         val transactionServiceAsync = client.transactions()
 
-        val transactionsFuture =
+        val responseFuture =
             transactionServiceAsync.listByAccount(
                 TransactionListByAccountParams.builder()
                     .accountId("182bd5e5-6e1a-4fe4-a799-aa6d9a6ab26e")
@@ -56,7 +56,7 @@ internal class TransactionServiceAsyncTest {
                     .build()
             )
 
-        val transactions = transactionsFuture.get()
-        transactions.forEach { it.validate() }
+        val response = responseFuture.get()
+        response.forEach { it.validate() }
     }
 }

@@ -4,9 +4,7 @@ package com.railsinfra.client
 
 import com.railsinfra.core.ClientOptions
 import com.railsinfra.services.blocking.AccountService
-import com.railsinfra.services.blocking.AuditEventService
 import com.railsinfra.services.blocking.TransactionService
-import com.railsinfra.services.blocking.UserService
 import java.util.function.Consumer
 
 /**
@@ -45,17 +43,11 @@ interface RailsClient {
      */
     fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient
 
-    /** Users */
-    fun users(): UserService
-
     /** Accounts */
     fun accounts(): AccountService
 
     /** Transactions */
     fun transactions(): TransactionService
-
-    /** Audit events */
-    fun auditEvents(): AuditEventService
 
     /**
      * Closes this client, relinquishing any underlying resources.
@@ -80,16 +72,10 @@ interface RailsClient {
          */
         fun withOptions(modifier: Consumer<ClientOptions.Builder>): RailsClient.WithRawResponse
 
-        /** Users */
-        fun users(): UserService.WithRawResponse
-
         /** Accounts */
         fun accounts(): AccountService.WithRawResponse
 
         /** Transactions */
         fun transactions(): TransactionService.WithRawResponse
-
-        /** Audit events */
-        fun auditEvents(): AuditEventService.WithRawResponse
     }
 }

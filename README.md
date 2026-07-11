@@ -1,30 +1,20 @@
 # Rails Java API Library
 
-<!-- x-release-please-start-version -->
-
-[![Maven Central](https://img.shields.io/maven-central/v/com.railsinfra/rails-java)](https://central.sonatype.com/artifact/com.railsinfra/rails-java/0.1.0)
-[![javadoc](https://javadoc.io/badge2/com.railsinfra/rails-java/0.1.0/javadoc.svg)](https://javadoc.io/doc/com.railsinfra/rails-java/0.1.0)
-
-<!-- x-release-please-end -->
+[![Maven Central](https://img.shields.io/maven-central/v/com.railsinfra/rails-java)](https://central.sonatype.com/artifact/com.railsinfra/rails-java/0.0.1)
+[![javadoc](https://javadoc.io/badge2/com.railsinfra/rails-java/0.0.1/javadoc.svg)](https://javadoc.io/doc/com.railsinfra/rails-java/0.0.1)
 
 The Rails Java SDK provides convenient access to the Rails REST API from applications written in Java.
 
 It is generated with [Stainless](https://www.stainless.com/).
 
-<!-- x-release-please-start-version -->
-
-Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.railsinfra/rails-java/0.1.0).
-
-<!-- x-release-please-end -->
+Javadocs are available on [javadoc.io](https://javadoc.io/doc/com.railsinfra/rails-java/0.0.1).
 
 ## Installation
-
-<!-- x-release-please-start-version -->
 
 ### Gradle
 
 ```kotlin
-implementation("com.railsinfra:rails-java:0.1.0")
+implementation("com.railsinfra:rails-java:0.0.1")
 ```
 
 ### Maven
@@ -33,36 +23,40 @@ implementation("com.railsinfra:rails-java:0.1.0")
 <dependency>
   <groupId>com.railsinfra</groupId>
   <artifactId>rails-java</artifactId>
-  <version>0.1.0</version>
+  <version>0.0.1</version>
 </dependency>
 ```
-
-<!-- x-release-please-end -->
 
 ## Requirements
 
 This library requires Java 8 or later.
+
+## Publishing to Maven Central (maintainers)
+
+From this directory, with Sonatype token and GPG key material in the environment:
+
+```bash
+./scripts/publish-maven-central
+```
+
+Required variables: `SONATYPE_USERNAME`, `SONATYPE_PASSWORD`, `GPG_SIGNING_KEY` (armored), `GPG_SIGNING_PASSWORD`; optional `GPG_SIGNING_KEY_ID`. The script runs `./gradlew publishToSonatype closeAndReleaseSonatypeStagingRepository` with the configuration cache disabled (required by the Nexus publish plugin). In GitHub Actions, use workflow **Publish Maven Central** (`.github/workflows/publish-maven-central.yml`) and configure the same names as repository secrets.
 
 ## Usage
 
 ```java
 import com.railsinfra.client.RailsClient;
 import com.railsinfra.client.okhttp.RailsOkHttpClient;
-import com.railsinfra.models.users.UserCreateParams;
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateParams;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-UserCreateResponse user = client.users().create(params);
+AccountCreateResponse account = client.accounts().create(params);
 ```
 
 ## Client configuration
@@ -105,10 +99,10 @@ RailsClient client = RailsOkHttpClient.builder()
 
 See this table for the available options:
 
-| Setter    | System property | Environment variable | Required | Default value                                          |
-| --------- | --------------- | -------------------- | -------- | ------------------------------------------------------ |
-| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                      |
-| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://rails-client-server-staging.up.railway.app"` |
+| Setter    | System property | Environment variable | Required | Default value                                       |
+| --------- | --------------- | -------------------- | -------- | --------------------------------------------------- |
+| `apiKey`  | `rails.apiKey`  | `RAILS_API_KEY`      | true     | -                                                   |
+| `baseUrl` | `rails.baseUrl` | `RAILS_BASE_URL`     | true     | `"https://accounts-service-staging.up.railway.app"` |
 
 System properties take precedence over environment variables.
 
@@ -135,7 +129,7 @@ The `withOptions()` method does not affect the original client or service.
 
 To send a request to the Rails API, build an instance of some `Params` class and pass it to the corresponding client method. When the response is received, it will be deserialized into an instance of a Java class.
 
-For example, `client.users().create(...)` should be called with an instance of `UserCreateParams`, and it will return an instance of `UserCreateResponse`.
+For example, `client.accounts().create(...)` should be called with an instance of `AccountCreateParams`, and it will return an instance of `AccountCreateResponse`.
 
 ## Immutability
 
@@ -152,22 +146,18 @@ The default client is synchronous. To switch to asynchronous execution, call the
 ```java
 import com.railsinfra.client.RailsClient;
 import com.railsinfra.client.okhttp.RailsOkHttpClient;
-import com.railsinfra.models.users.UserCreateParams;
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateParams;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClient client = RailsOkHttpClient.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-CompletableFuture<UserCreateResponse> user = client.async().users().create(params);
+CompletableFuture<AccountCreateResponse> account = client.async().accounts().create(params);
 ```
 
 Or create an asynchronous client from the beginning:
@@ -175,22 +165,18 @@ Or create an asynchronous client from the beginning:
 ```java
 import com.railsinfra.client.RailsClientAsync;
 import com.railsinfra.client.okhttp.RailsOkHttpClientAsync;
-import com.railsinfra.models.users.UserCreateParams;
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateParams;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 import java.util.concurrent.CompletableFuture;
 
 // Configures using the `rails.apiKey` and `rails.baseUrl` system properties
 // Or configures using the `RAILS_API_KEY` and `RAILS_BASE_URL` environment variables
 RailsClientAsync client = RailsOkHttpClientAsync.fromEnv();
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-CompletableFuture<UserCreateResponse> user = client.users().create(params);
+CompletableFuture<AccountCreateResponse> account = client.accounts().create(params);
 ```
 
 The asynchronous client supports the same options as the synchronous one, except most methods return `CompletableFuture`s.
@@ -204,28 +190,24 @@ To access this data, prefix any HTTP method call on a client or service with `wi
 ```java
 import com.railsinfra.core.http.Headers;
 import com.railsinfra.core.http.HttpResponseFor;
-import com.railsinfra.models.users.UserCreateParams;
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateParams;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email("jane@example.com")
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(AccountCreateParams.AccountType.CHECKING)
     .build();
-HttpResponseFor<UserCreateResponse> user = client.users().withRawResponse().create(params);
+HttpResponseFor<AccountCreateResponse> account = client.accounts().withRawResponse().create(params);
 
-int statusCode = user.statusCode();
-Headers headers = user.headers();
+int statusCode = account.statusCode();
+Headers headers = account.headers();
 ```
 
 You can still deserialize the response into an instance of a Java class if needed:
 
 ```java
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
-UserCreateResponse parsedUser = user.parse();
+AccountCreateResponse parsedAccount = account.parse();
 ```
 
 ## Error handling
@@ -234,8 +216,8 @@ The SDK throws custom unchecked exception types:
 
 - [`RailsServiceException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsServiceException.kt): Base class for HTTP errors. See this table for which exception subclass is thrown for each HTTP status code:
 
-  | Status | Exception                                                                                                                 |
-  | ------ | ------------------------------------------------------------------------------------------------------------------------- |
+  | Status | Exception                                                                                                                |
+  | ------ | ------------------------------------------------------------------------------------------------------------------------ |
   | 400    | [`BadRequestException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/BadRequestException.kt)                     |
   | 401    | [`UnauthorizedException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/UnauthorizedException.kt)                 |
   | 403    | [`PermissionDeniedException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/PermissionDeniedException.kt)         |
@@ -255,6 +237,8 @@ The SDK throws custom unchecked exception types:
 
 ## Logging
 
+The SDK uses the standard [OkHttp logging interceptor](https://github.com/square/okhttp/tree/master/okhttp-logging-interceptor).
+
 Enable logging by setting the `RAILS_LOG` environment variable to `info`:
 
 ```sh
@@ -265,19 +249,6 @@ Or to `debug` for more verbose logging:
 
 ```sh
 export RAILS_LOG=debug
-```
-
-Or configure the client manually using the `logLevel` method:
-
-```java
-import com.railsinfra.client.RailsClient;
-import com.railsinfra.client.okhttp.RailsOkHttpClient;
-import com.railsinfra.core.LogLevel;
-
-RailsClient client = RailsOkHttpClient.builder()
-    .fromEnv()
-    .logLevel(LogLevel.INFO)
-    .build();
 ```
 
 ## ProGuard and R8
@@ -334,9 +305,9 @@ Requests time out after 1 minute by default.
 To set a custom timeout, configure the method call using the `timeout` method:
 
 ```java
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(
+AccountCreateResponse account = client.accounts().create(
   params, RequestOptions.builder().timeout(Duration.ofSeconds(30)).build()
 );
 ```
@@ -371,21 +342,6 @@ RailsClient client = RailsOkHttpClient.builder()
         "https://example.com", 8080
       )
     ))
-    .build();
-```
-
-If the proxy responds with `407 Proxy Authentication Required`, supply credentials by also configuring `proxyAuthenticator`:
-
-```java
-import com.railsinfra.client.RailsClient;
-import com.railsinfra.client.okhttp.RailsOkHttpClient;
-import com.railsinfra.core.http.ProxyAuthenticator;
-
-RailsClient client = RailsOkHttpClient.builder()
-    .fromEnv()
-    .proxy(...)
-    // Or a custom implementation of `ProxyAuthenticator`.
-    .proxyAuthenticator(ProxyAuthenticator.basic("username", "password"))
     .build();
 ```
 
@@ -489,9 +445,9 @@ To set undocumented parameters, call the `putAdditionalHeader`, `putAdditionalQu
 
 ```java
 import com.railsinfra.core.JsonValue;
-import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
+AccountCreateParams params = AccountCreateParams.builder()
     .putAdditionalHeader("Secret-Header", "42")
     .putAdditionalQueryParam("secret_query_param", "42")
     .putAdditionalBodyProperty("secretProperty", JsonValue.from("42"))
@@ -504,14 +460,10 @@ To set a documented parameter or property to an undocumented or not yet supporte
 
 ```java
 import com.railsinfra.core.JsonValue;
-import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .email(JsonValue.from(42))
-    .firstName("Jane")
-    .lastName("Doe")
-    .password("your-secure-password")
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(JsonValue.from(42))
     .build();
 ```
 
@@ -560,14 +512,10 @@ To forcibly omit a required parameter or property, pass [`JsonMissing`](rails-ja
 
 ```java
 import com.railsinfra.core.JsonMissing;
-import com.railsinfra.models.users.UserCreateParams;
+import com.railsinfra.models.accounts.AccountCreateParams;
 
-UserCreateParams params = UserCreateParams.builder()
-    .xEnvironment(UserCreateParams.XEnvironment.SANDBOX)
-    .firstName("first_name")
-    .lastName("last_name")
-    .password("password")
-    .email(JsonMissing.of())
+AccountCreateParams params = AccountCreateParams.builder()
+    .accountType(JsonMissing.of())
     .build();
 ```
 
@@ -579,7 +527,7 @@ To access undocumented response properties, call the `_additionalProperties()` m
 import com.railsinfra.core.JsonValue;
 import java.util.Map;
 
-Map<String, JsonValue> additionalProperties = client.users().create(params)._additionalProperties();
+Map<String, JsonValue> additionalProperties = client.accounts().create(params)._additionalProperties();
 JsonValue secretPropertyValue = additionalProperties.get("secretProperty");
 
 String result = secretPropertyValue.accept(new JsonValue.Visitor<>() {
@@ -607,21 +555,22 @@ To access a property's raw JSON value, which may be undocumented, call its `_` p
 
 ```java
 import com.railsinfra.core.JsonField;
+import com.railsinfra.models.accounts.AccountCreateParams;
 import java.util.Optional;
 
-JsonField<String> email = client.users().create(params)._email();
+JsonField<AccountCreateParams.AccountType> accountType = client.accounts().create(params)._accountType();
 
-if (email.isMissing()) {
+if (accountType.isMissing()) {
   // The property is absent from the JSON response
-} else if (email.isNull()) {
+} else if (accountType.isNull()) {
   // The property was set to literal null
 } else {
   // Check if value was provided as a string
   // Other methods include `asNumber()`, `asBoolean()`, etc.
-  Optional<String> jsonString = email.asString();
+  Optional<String> jsonString = accountType.asString();
 
   // Try to deserialize into a custom type
-  MyClass myObject = email.asUnknown().orElseThrow().convert(MyClass.class);
+  MyClass myObject = accountType.asUnknown().orElseThrow().convert(MyClass.class);
 }
 ```
 
@@ -631,22 +580,20 @@ In rare cases, the API may return a response that doesn't match the expected typ
 
 By default, the SDK will not throw an exception in this case. It will throw [`RailsInvalidDataException`](rails-java-core/src/main/kotlin/com/railsinfra/errors/RailsInvalidDataException.kt) only if you directly access the property.
 
-Validating the response is _not_ forwards compatible with new types from the API for existing fields.
-
-If you would still prefer to check that the response is completely well-typed upfront, then either call `validate()`:
+If you would prefer to check that the response is completely well-typed upfront, then either call `validate()`:
 
 ```java
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(params).validate();
+AccountCreateResponse account = client.accounts().create(params).validate();
 ```
 
 Or configure the method call to validate the response using the `responseValidation` method:
 
 ```java
-import com.railsinfra.models.users.UserCreateResponse;
+import com.railsinfra.models.accounts.AccountCreateResponse;
 
-UserCreateResponse user = client.users().create(
+AccountCreateResponse account = client.accounts().create(
   params, RequestOptions.builder().responseValidation(true).build()
 );
 ```
@@ -701,4 +648,4 @@ This package generally follows [SemVer](https://semver.org/spec/v2.0.0.html) con
 
 We take backwards-compatibility seriously and work hard to ensure you can rely on a smooth upgrade experience.
 
-We are keen for your feedback; please open an [issue](https://www.github.com/railsinfra/rails-java/issues) with questions, bugs, or suggestions.
+We are keen for your feedback; please open an [issue](https://github.com/railsinfra/rails-java/issues) with questions, bugs, or suggestions.

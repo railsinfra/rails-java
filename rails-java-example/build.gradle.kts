@@ -20,7 +20,7 @@ tasks.withType<JavaCompile>().configureEach {
 application {
     // Use `./gradlew :rails-java-example:run` to run `Main`
     // Use `./gradlew :rails-java-example:run -Pexample=Something` to run `SomethingExample`
-    mainClass = "com.rails.api.example.${
+    mainClass = "com.railsinfra.example.${
         if (project.hasProperty("example"))
             "${project.property("example")}Example"
         else

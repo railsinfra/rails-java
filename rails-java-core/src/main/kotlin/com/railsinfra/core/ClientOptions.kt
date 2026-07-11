@@ -5,7 +5,6 @@ package com.railsinfra.core
 import com.fasterxml.jackson.databind.json.JsonMapper
 import com.railsinfra.core.http.Headers
 import com.railsinfra.core.http.HttpClient
-import com.railsinfra.core.http.LoggingHttpClient
 import com.railsinfra.core.http.PhantomReachableClosingHttpClient
 import com.railsinfra.core.http.QueryParams
 import com.railsinfra.core.http.RetryingHttpClient
@@ -67,9 +66,6 @@ private constructor(
     /**
      * Whether to call `validate` on every response before returning it.
      *
-     * Setting this to `true` is _not_ forwards compatible with new types from the API for existing
-     * fields.
-     *
      * Defaults to false, which means the shape of the response will not be validated upfront.
      * Instead, validation will only occur for the parts of the response that are accessed.
      */
@@ -97,14 +93,6 @@ private constructor(
      * Defaults to 2.
      */
     @get:JvmName("maxRetries") val maxRetries: Int,
-    /**
-     * The level at which to log request and response information.
-     *
-     * [fromEnv] will set the level from environment variables. See [LogLevel.fromEnv].
-     *
-     * Defaults to [LogLevel.fromEnv].
-     */
-    @get:JvmName("logLevel") val logLevel: LogLevel,
     @get:JvmName("apiKey") val apiKey: String,
 ) {
 
@@ -117,10 +105,10 @@ private constructor(
     /**
      * The base URL to use for every request.
      *
-     * Defaults to the staging environment: `https://rails-client-server-staging.up.railway.app`.
+     * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
      *
      * The following other environments, with dedicated builder methods, are available:
-     * - production: `https://www.api.railsinfra.com`
+     * - production: `https://accounts-service-production.up.railway.app`
      */
     fun baseUrl(): String = baseUrl ?: STAGING_URL
 
@@ -128,9 +116,9 @@ private constructor(
 
     companion object {
 
-        const val STAGING_URL = "https://rails-client-server-staging.up.railway.app"
+        const val STAGING_URL = "https://accounts-service-staging.up.railway.app"
 
-        const val PRODUCTION_URL = "https://www.api.railsinfra.com"
+        const val PRODUCTION_URL = "https://accounts-service-production.up.railway.app"
 
         /**
          * Returns a mutable builder for constructing an instance of [ClientOptions].
@@ -165,7 +153,6 @@ private constructor(
         private var responseValidation: Boolean = false
         private var timeout: Timeout = Timeout.default()
         private var maxRetries: Int = 2
-        private var logLevel: LogLevel = LogLevel.fromEnv()
         private var apiKey: String? = null
 
         @JvmSynthetic
@@ -181,7 +168,6 @@ private constructor(
             responseValidation = clientOptions.responseValidation
             timeout = clientOptions.timeout
             maxRetries = clientOptions.maxRetries
-            logLevel = clientOptions.logLevel
             apiKey = clientOptions.apiKey
         }
 
@@ -210,8 +196,8 @@ private constructor(
         /**
          * The Jackson JSON mapper to use for serializing and deserializing JSON.
          *
-         * Defaults to [com.railsinfra.core.jsonMapper]. The default is usually sufficient and
-         * rarely needs to be overridden.
+         * Defaults to [com.railsinfra.core.jsonMapper]. The default is usually sufficient and rarely
+         * needs to be overridden.
          */
         fun jsonMapper(jsonMapper: JsonMapper) = apply { this.jsonMapper = jsonMapper }
 
@@ -238,25 +224,21 @@ private constructor(
         /**
          * The base URL to use for every request.
          *
-         * Defaults to the staging environment:
-         * `https://rails-client-server-staging.up.railway.app`.
+         * Defaults to the staging environment: `https://accounts-service-staging.up.railway.app`.
          *
          * The following other environments, with dedicated builder methods, are available:
-         * - production: `https://www.api.railsinfra.com`
+         * - production: `https://accounts-service-production.up.railway.app`
          */
         fun baseUrl(baseUrl: String?) = apply { this.baseUrl = baseUrl }
 
         /** Alias for calling [Builder.baseUrl] with `baseUrl.orElse(null)`. */
         fun baseUrl(baseUrl: Optional<String>) = baseUrl(baseUrl.getOrNull())
 
-        /** Sets [baseUrl] to `https://www.api.railsinfra.com`. */
+        /** Sets [baseUrl] to `https://accounts-service-production.up.railway.app`. */
         fun production() = baseUrl(PRODUCTION_URL)
 
         /**
          * Whether to call `validate` on every response before returning it.
-         *
-         * Setting this to `true` is _not_ forwards compatible with new types from the API for
-         * existing fields.
          *
          * Defaults to false, which means the shape of the response will not be validated upfront.
          * Instead, validation will only occur for the parts of the response that are accessed.
@@ -298,15 +280,6 @@ private constructor(
          * Defaults to 2.
          */
         fun maxRetries(maxRetries: Int) = apply { this.maxRetries = maxRetries }
-
-        /**
-         * The level at which to log request and response information.
-         *
-         * [fromEnv] will set the level from environment variables. See [LogLevel.fromEnv].
-         *
-         * Defaults to [LogLevel.fromEnv].
-         */
-        fun logLevel(logLevel: LogLevel) = apply { this.logLevel = logLevel }
 
         fun apiKey(apiKey: String) = apply { this.apiKey = apiKey }
 
@@ -397,28 +370,19 @@ private constructor(
          *
          * See this table for the available options:
          *
-         * |Setter   |System property|Environment variable|Required|Default value                                         |
-         * |---------|---------------|--------------------|--------|------------------------------------------------------|
-         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                     |
-         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://rails-client-server-staging.up.railway.app"`|
+         * |Setter   |System property|Environment variable|Required|Default value                                      |
+         * |---------|---------------|--------------------|--------|---------------------------------------------------|
+         * |`apiKey` |`rails.apiKey` |`RAILS_API_KEY`     |true    |-                                                  |
+         * |`baseUrl`|`rails.baseUrl`|`RAILS_BASE_URL`    |true    |`"https://accounts-service-staging.up.railway.app"`|
          *
          * System properties take precedence over environment variables.
          */
         fun fromEnv() = apply {
-            logLevel(LogLevel.fromEnv())
             (System.getProperty("rails.baseUrl") ?: System.getenv("RAILS_BASE_URL"))?.let {
                 baseUrl(it)
             }
             (System.getProperty("rails.apiKey") ?: System.getenv("RAILS_API_KEY"))?.let {
                 apiKey(it)
-            }
-            System.getenv("RAILS_CUSTOM_HEADERS")?.let { customHeadersEnv ->
-                for (line in customHeadersEnv.split("\n")) {
-                    val colon = line.indexOf(':')
-                    if (colon >= 0) {
-                        putHeader(line.substring(0, colon).trim(), line.substring(colon + 1).trim())
-                    }
-                }
             }
         }
 
@@ -462,13 +426,7 @@ private constructor(
             return ClientOptions(
                 httpClient,
                 RetryingHttpClient.builder()
-                    .httpClient(
-                        LoggingHttpClient.builder()
-                            .httpClient(httpClient)
-                            .clock(clock)
-                            .level(logLevel)
-                            .build()
-                    )
+                    .httpClient(httpClient)
                     .sleeper(sleeper)
                     .clock(clock)
                     .maxRetries(maxRetries)
@@ -483,7 +441,6 @@ private constructor(
                 responseValidation,
                 timeout,
                 maxRetries,
-                logLevel,
                 apiKey,
             )
         }
